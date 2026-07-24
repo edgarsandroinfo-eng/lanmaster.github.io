@@ -558,3 +558,69 @@ grid-template-columns:1fr;
 }
 
 }
+
+/*=============================
+MENU MOBILE
+=============================*/
+
+.btnMenu{
+
+    display:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+@media(max-width:900px){
+
+    .btnMenu{
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+    }
+
+    .sidebar{
+
+        display:flex;
+
+        position:fixed;
+
+        left:-280px;
+
+        top:0;
+
+        width:260px;
+
+        height:100vh;
+
+        z-index:999;
+
+        transition:.3s;
+
+    }
+
+    .sidebar.aberto{
+
+        left:0;
+
+    }
+
+}

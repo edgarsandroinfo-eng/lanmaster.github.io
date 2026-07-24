@@ -108,6 +108,15 @@ function configurarMenu(){
 
             renderizar();
 
+            // Fecha o menu automaticamente no celular
+            if(window.innerWidth <= 900){
+
+                document
+                .querySelector(".sidebar")
+                .classList.remove("aberto");
+
+            }
+
         });
 
     });
@@ -607,3 +616,45 @@ document.getElementById("btnFavoritos").onclick = function(){
     renderizar();
 
 };
+
+
+
+/*=========================
+MENU MOBILE
+=========================*/
+
+const btnMenu = document.getElementById("btnMenu");
+
+if(btnMenu){
+
+    btnMenu.onclick=function(e){
+
+        e.stopPropagation();
+
+        document
+        .querySelector(".sidebar")
+        .classList.toggle("aberto");
+
+    }
+
+}
+
+// Fecha ao tocar fora do menu
+document.addEventListener("click",function(e){
+
+    if(window.innerWidth > 900) return;
+
+    const menu=document.querySelector(".sidebar");
+
+    if(
+        menu.classList.contains("aberto") &&
+        !menu.contains(e.target) &&
+        e.target.id!="btnMenu" &&
+        !e.target.closest("#btnMenu")
+    ){
+
+        menu.classList.remove("aberto");
+
+    }
+
+});
