@@ -659,3 +659,9 @@ document.addEventListener("click",function(e){
     }
 
 });
+
+window.favoritar = favoritar;
+window.concluir = concluir;
+window.editarCartao = editarCartao;
+window.restaurar = restaurar;
+window.excluir = excluir;
