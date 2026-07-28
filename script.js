@@ -910,3 +910,38 @@ btnCancelarPrompt.onclick = function(){
     modalPrompt.style.display = "none";
 
 }
+
+
+btnSalvarPrompt.onclick = async function(){
+
+    if(txtTituloPrompt.value.trim() == ""){
+
+        alert("Informe um título.");
+
+        txtTituloPrompt.focus();
+
+        return;
+
+    }
+
+    const agora = new Date();
+
+    banco["Prompts"].push({
+
+        titulo: txtTituloPrompt.value.trim(),
+
+        prompt: txtPrompt.value.trim(),
+
+        data: agora.toLocaleString("pt-BR"),
+
+        timestamp: Date.now()
+
+    });
+
+    await salvarBanco();
+
+    modalPrompt.style.display = "none";
+
+    renderizar();
+
+}
