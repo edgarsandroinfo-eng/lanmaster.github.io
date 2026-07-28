@@ -245,11 +245,21 @@ body{
 }
 
 .card p{
+
     margin-bottom:20px;
 
     color:#94a3b8;
 
     line-height:1.6;
+
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:4;
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    min-height:102px;
 }
 
 .data{
@@ -393,6 +403,12 @@ body{
     .app{
         grid-template-columns:1fr;
     }
+
+
+.card p{
+    -webkit-line-clamp:3;
+    min-height:78px;
+}
 
     .conteudo{
         padding:20px;
