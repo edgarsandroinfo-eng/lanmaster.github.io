@@ -472,6 +472,68 @@ placeholder="Pesquisar anotações...">
 </div>
 
 
+<!-- =========================================
+MODAL GERAR PROMPT
+========================================= -->
+
+<div id="modalGerarPrompt" class="modal">
+
+    <div class="janelaPromptGerado">
+
+        <div class="cabecalhoPrompt">
+
+            <h2>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Gerar Prompt
+            </h2>
+
+        </div>
+
+        <div class="corpoPrompt">
+
+            <label>Título</label>
+
+            <input
+                id="txtTituloGerado"
+                class="campoPrompt"
+                readonly>
+
+            <label>Prompt</label>
+
+            <textarea
+                id="txtPromptGerado"
+                class="textoPrompt"
+                readonly></textarea>
+
+        </div>
+
+        <div class="rodapePrompt">
+
+            <button
+                id="btnFecharGerado"
+                class="btnSecundario">
+
+                Fechar
+
+            </button>
+
+            <button
+                id="btnCopiarPrompt"
+                class="btnPrincipal">
+
+                <i class="fa-solid fa-copy"></i>
+
+                Copiar Prompt
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script type="module" src="script.js"></script>
 
 </body>
