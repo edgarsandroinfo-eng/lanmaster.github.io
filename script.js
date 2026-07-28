@@ -371,6 +371,54 @@ function desenharCards(){
 
     });
 
+
+const ordemPrioridade = {
+    "A": 1,
+    "M": 2,
+    "B": 3
+};
+
+lista.sort((a, b) => {
+
+    // 1 - Prioridade
+    const prioridade =
+        ordemPrioridade[a.dados.prioridade] -
+        ordemPrioridade[b.dados.prioridade];
+
+    if (prioridade !== 0)
+        return prioridade;
+
+    // 2 - Data de vencimento
+    const va = a.dados.vencimento;
+    const vb = b.dados.vencimento;
+
+    if (va && vb) {
+
+        const dataA = new Date(va);
+        const dataB = new Date(vb);
+
+        if (dataA.getTime() !== dataB.getTime()) {
+            return dataA - dataB;
+        }
+
+    } else if (va && !vb) {
+
+        return -1;
+
+    } else if (!va && vb) {
+
+        return 1;
+
+    }
+
+    // 3 - Mais recente primeiro
+  return (
+    (b.dados.timestamp || 0) -
+    (a.dados.timestamp || 0)
+);
+
+});
+
     if(lista.length===0){
 
         area.innerHTML=`
@@ -532,25 +580,29 @@ btnSalvarModal.onclick = async function(){
 
     const agora = new Date();
 
-    banco[categoriaAtual].push({
+banco[categoriaAtual].push({
 
-        titulo:txtTitulo.value.trim(),
+    titulo:txtTitulo.value.trim(),
 
-        descricao:txtDescricao.value.trim(),
+    descricao:txtDescricao.value.trim(),
 
-        data:agora.toLocaleString("pt-BR"),
+    data:agora.toLocaleString("pt-BR"),
 
-        favorito:chkFavorito.checked,
+    timestamp: Date.now(),
 
-       prioridade: prioridadeSelecionada,
+    favorito:chkFavorito.checked,
 
-        tag:"",
+    prioridade: prioridadeSelecionada,
 
-        vencimento:chkData.checked ? txtData.value : "",
+    tag:"",
 
-        fixado:false
+    vencimento:chkData.checked ? txtData.value : "",
 
-    });
+    fixado:false
+
+});
+
+
 
     await salvarBanco();
 
