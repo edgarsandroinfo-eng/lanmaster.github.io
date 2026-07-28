@@ -579,27 +579,31 @@ function desenharPrompts(){
 
             <div class="acoes">
 
-                <button>
+    <button onclick="gerarPrompt(${indice})">
 
-                    🎨 Gerar
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
 
-                </button>
+        Gerar
 
-                <button>
+    </button>
 
-                    ✏ Editar
+    <button onclick="editarPrompt(${indice})">
 
-                </button>
+        <i class="fa-solid fa-pen"></i>
 
-               <button onclick="excluirPrompt(${indice})">
+        Editar
 
-  		  🗑 Excluir
+    </button>
 
-		</button>
+    <button onclick="excluirPrompt(${indice})">
 
-            </div>
+        <i class="fa-solid fa-trash"></i>
 
-        </div>
+        Excluir
+
+    </button>
+
+</div>
 
         `;
 
@@ -654,6 +658,7 @@ const btnSim = document.getElementById("btnSim");
 const btnNao = document.getElementById("btnNao");
 
 let acaoConfirmada = null;
+let indiceEdicaoPrompt = -1;
 
 
 function abrirConfirmacao(texto, acao){
@@ -1040,13 +1045,36 @@ window.restaurar = restaurar;
 window.excluir = excluir;
 
 window.excluirPrompt = excluirPrompt;
+window.editarPrompt = editarPrompt;
 
 
 
 function novoPrompt(){
 
+    indiceEdicaoPrompt = -1;
+
     txtTituloPrompt.value = "";
+
     txtPrompt.value = "";
+
+    document.querySelector(".cabecalhoPrompt h2").innerHTML = "Novo Prompt";
+
+    modalPrompt.style.display = "flex";
+
+    txtTituloPrompt.focus();
+
+}
+
+
+function editarPrompt(indice){
+
+    indiceEdicaoPrompt = indice;
+
+    txtTituloPrompt.value = banco["Prompts"][indice].titulo;
+
+    txtPrompt.value = banco["Prompts"][indice].prompt;
+
+    document.querySelector(".cabecalhoPrompt h2").innerHTML = "Editar Prompt";
 
     modalPrompt.style.display = "flex";
 
@@ -1074,19 +1102,31 @@ btnSalvarPrompt.onclick = async function(){
 
     }
 
-    const agora = new Date();
+    if(indiceEdicaoPrompt == -1){
 
-    banco["Prompts"].push({
+        const agora = new Date();
 
-        titulo: txtTituloPrompt.value.trim(),
+        banco["Prompts"].push({
 
-        prompt: txtPrompt.value.trim(),
+            titulo: txtTituloPrompt.value.trim(),
 
-        data: agora.toLocaleString("pt-BR"),
+            prompt: txtPrompt.value.trim(),
 
-        timestamp: Date.now()
+            data: agora.toLocaleString("pt-BR"),
 
-    });
+            timestamp: Date.now()
+
+        });
+
+    }else{
+
+        banco["Prompts"][indiceEdicaoPrompt].titulo =
+            txtTituloPrompt.value.trim();
+
+        banco["Prompts"][indiceEdicaoPrompt].prompt =
+            txtPrompt.value.trim();
+
+    }
 
     await salvarBanco();
 
