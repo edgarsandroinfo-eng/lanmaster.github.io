@@ -247,6 +247,28 @@ function atualizarTitulo(){
 
     }
 
+const btnNova = document.getElementById("btnNova");
+const btnNova2 = document.getElementById("btnNova2");
+
+const textoBotao =
+    categoriaAtual === "Prompts"
+        ? "Novo Prompt"
+        : "Nova Anotação";
+
+if (btnNova) {
+    btnNova.innerHTML = `
+        <i class="fa-solid fa-plus"></i>
+        ${textoBotao}
+    `;
+}
+
+if (btnNova2) {
+    btnNova2.innerHTML = `
+        <i class="fa-solid fa-plus"></i>
+        ${textoBotao}
+    `;
+}
+
 }
 
 /*=====================================================
