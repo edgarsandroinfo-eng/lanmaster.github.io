@@ -591,11 +591,11 @@ function desenharPrompts(){
 
                 </button>
 
-                <button>
+               <button onclick="excluirPrompt(${indice})">
 
-                    🗑 Excluir
+  		  🗑 Excluir
 
-                </button>
+		</button>
 
             </div>
 
@@ -965,12 +965,31 @@ function mostrarMensagemConclusao(){
 
 }
 
+/*=====================================================
+EXCLUIR PROMPT
+=====================================================*/
+
+async function excluirPrompt(indice){
+
+    if(!confirm("Deseja realmente excluir este Prompt?"))
+        return;
+
+    banco["Prompts"].splice(indice,1);
+
+    await salvarBanco();
+
+    renderizar();
+
+}
 
 window.favoritar = favoritar;
 window.concluir = concluir;
 window.editarCartao = editarCartao;
 window.restaurar = restaurar;
 window.excluir = excluir;
+
+window.excluirPrompt = excluirPrompt;
+
 
 
 function novoPrompt(){
