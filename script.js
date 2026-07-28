@@ -642,6 +642,50 @@ const txtPrompt = document.getElementById("txtPrompt");
 const btnCancelarPrompt = document.getElementById("btnCancelarPrompt");
 const btnSalvarPrompt = document.getElementById("btnSalvarPrompt");
 
+/*=====================================================
+MODAL CONFIRMAÇÃO
+=====================================================*/
+
+const modalConfirmar = document.getElementById("modalConfirmar");
+
+const textoConfirmacao = document.getElementById("textoConfirmacao");
+
+const btnSim = document.getElementById("btnSim");
+const btnNao = document.getElementById("btnNao");
+
+let acaoConfirmada = null;
+
+
+function abrirConfirmacao(texto, acao){
+
+    textoConfirmacao.innerHTML = texto;
+
+    acaoConfirmada = acao;
+
+    modalConfirmar.style.display = "flex";
+
+}
+
+btnNao.onclick = function(){
+
+    modalConfirmar.style.display = "none";
+
+    acaoConfirmada = null;
+
+}
+
+btnSim.onclick = function(){
+
+    modalConfirmar.style.display = "none";
+
+    if(acaoConfirmada){
+
+        acaoConfirmada();
+
+    }
+
+}
+
 function selecionarPrioridade(nivel){
 
     prioridadeSelecionada = nivel;
@@ -971,14 +1015,21 @@ EXCLUIR PROMPT
 
 async function excluirPrompt(indice){
 
-    if(!confirm("Deseja realmente excluir este Prompt?"))
-        return;
+    abrirConfirmacao(
 
-    banco["Prompts"].splice(indice,1);
+        "Deseja realmente excluir este Prompt?",
 
-    await salvarBanco();
+        async function(){
 
-    renderizar();
+            banco["Prompts"].splice(indice,1);
+
+            await salvarBanco();
+
+            renderizar();
+
+        }
+
+    );
 
 }
 
