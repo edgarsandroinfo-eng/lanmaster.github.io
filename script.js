@@ -647,6 +647,21 @@ const btnCancelarPrompt = document.getElementById("btnCancelarPrompt");
 const btnSalvarPrompt = document.getElementById("btnSalvarPrompt");
 
 /*=====================================================
+MODAL GERAR PROMPT
+=====================================================*/
+
+const modalGerarPrompt = document.getElementById("modalGerarPrompt");
+
+const txtTituloGerado = document.getElementById("txtTituloGerado");
+
+const txtPromptGerado = document.getElementById("txtPromptGerado");
+
+const btnFecharGerado = document.getElementById("btnFecharGerado");
+
+const btnCopiarPrompt = document.getElementById("btnCopiarPrompt");
+
+
+/*=====================================================
 MODAL CONFIRMAÇÃO
 =====================================================*/
 
@@ -1046,7 +1061,7 @@ window.excluir = excluir;
 
 window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
-
+window.gerarPrompt = gerarPrompt;
 
 
 function novoPrompt(){
@@ -1079,6 +1094,44 @@ function editarPrompt(indice){
     modalPrompt.style.display = "flex";
 
     txtTituloPrompt.focus();
+
+}
+
+
+function gerarPrompt(indice){
+
+    const prompt = banco["Prompts"][indice];
+
+    txtTituloGerado.value = prompt.titulo;
+
+    txtPromptGerado.value = prompt.prompt;
+
+    modalGerarPrompt.style.display = "flex";
+
+}
+
+
+btnCopiarPrompt.onclick = async function(){
+
+    try{
+
+        await navigator.clipboard.writeText(
+            txtPromptGerado.value
+        );
+
+        alert("✅ Prompt copiado com sucesso!");
+
+    }catch{
+
+        alert("Não foi possível copiar o Prompt.");
+
+    }
+
+}
+
+btnFecharGerado.onclick = function(){
+
+    modalGerarPrompt.style.display = "none";
 
 }
 
