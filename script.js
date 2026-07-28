@@ -53,6 +53,26 @@ async function iniciarSistema(){
 
     }
 
+// Garante que todas as categorias existam
+let alterouBanco = false;
+
+CATEGORIAS.forEach(cat => {
+
+    if (!banco[cat]) {
+
+        banco[cat] = [];
+        alterouBanco = true;
+
+    }
+
+});
+
+if (alterouBanco) {
+
+    await salvarBanco();
+
+}
+
     observarFirebase((novoBanco)=>{
 
         banco = novoBanco;
