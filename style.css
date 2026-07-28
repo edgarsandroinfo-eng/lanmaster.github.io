@@ -880,3 +880,169 @@ body{
     font-size: 22px;
 
 }
+
+/*=====================================================
+MODAL PROMPTS
+=====================================================*/
+
+.janelaPrompt{
+
+    width:900px;
+    max-width:95%;
+
+    height:720px;
+
+    background:#141c2f;
+
+    border-radius:18px;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.cabecalhoPrompt{
+
+    padding:28px 35px;
+
+    border-bottom:1px solid #27334d;
+
+}
+
+.cabecalhoPrompt h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:38px;
+
+}
+
+.corpoPrompt{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:30px 35px;
+
+}
+
+.corpoPrompt label{
+
+    color:#fff;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    margin-top:18px;
+
+}
+
+.campoPrompt{
+
+    height:55px;
+
+    border-radius:14px;
+
+    border:1px solid #3f6ec9;
+
+    background:#11192c;
+
+    color:#fff;
+
+    padding:0 18px;
+
+    font-size:18px;
+
+}
+
+.textoPrompt{
+
+    flex:1;
+
+    resize:none;
+
+    border-radius:14px;
+
+    border:1px solid #31486e;
+
+    background:#11192c;
+
+    color:#fff;
+
+    padding:18px;
+
+    font-size:17px;
+
+    line-height:1.6;
+
+}
+
+.rodapePrompt{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:25px 35px;
+
+    border-top:1px solid #27334d;
+
+}
+
+.btnPrincipal{
+
+    background:#2d7ff9;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 26px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.btnPrincipal:hover{
+
+    background:#1666df;
+
+}
+
+.btnSecundario{
+
+    background:#2a3448;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 26px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.btnSecundario:hover{
+
+    background:#39455e;
+
+}

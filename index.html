@@ -375,19 +375,45 @@ placeholder="Pesquisar anotações...">
 <!-- MODAL PROMPTS -->
 <div id="modalPrompt" class="modal">
 
-    <div class="janela">
+    <div class="janelaPrompt">
 
-        <h2>Novo Prompt</h2>
+        <div class="cabecalhoPrompt">
 
-        <label>Título</label>
-        <input type="text" id="txtTituloPrompt">
+            <h2>Novo Prompt</h2>
 
-        <label>Prompt</label>
-        <textarea id="txtPrompt" style="height:300px;"></textarea>
+        </div>
 
-        <div class="rodapeModal">
-            <button id="btnCancelarPrompt">Cancelar</button>
-            <button id="btnSalvarPrompt">Salvar</button>
+        <div class="corpoPrompt">
+
+            <label>Título</label>
+
+            <input
+                type="text"
+                id="txtTituloPrompt"
+                class="campoPrompt">
+
+            <label>Prompt</label>
+
+            <textarea
+                id="txtPrompt"
+                class="textoPrompt"></textarea>
+
+        </div>
+
+        <div class="rodapePrompt">
+
+            <button
+                id="btnCancelarPrompt"
+                class="btnSecundario">
+                Cancelar
+            </button>
+
+            <button
+                id="btnSalvarPrompt"
+                class="btnPrincipal">
+                Salvar
+            </button>
+
         </div>
 
     </div>
