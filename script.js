@@ -18,6 +18,7 @@ const CATEGORIAS = [
     "VBA",
     "Investimentos",
     "Marketing",
+    "Prompts"
     "Compras",
     "Favoritos",
     "Concluídos"
