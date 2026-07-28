@@ -661,6 +661,11 @@ const btnFecharGerado = document.getElementById("btnFecharGerado");
 const btnCopiarPrompt = document.getElementById("btnCopiarPrompt");
 
 
+const btnChatGPT = document.getElementById("btnChatGPT");
+
+const btnGemini = document.getElementById("btnGemini");
+
+
 /*=====================================================
 MODAL CONFIRMAÇÃO
 =====================================================*/
@@ -1124,6 +1129,51 @@ btnCopiarPrompt.onclick = async function(){
     }catch{
 
         alert("Não foi possível copiar o Prompt.");
+
+    }
+
+}
+
+
+
+btnChatGPT.onclick = async function(){
+
+    try{
+
+        await navigator.clipboard.writeText(
+            txtPromptGerado.value
+        );
+
+        window.open(
+            "https://chatgpt.com/",
+            "_blank"
+        );
+
+    }catch{
+
+        alert("Não foi possível abrir o ChatGPT.");
+
+    }
+
+}
+
+
+btnGemini.onclick = async function(){
+
+    try{
+
+        await navigator.clipboard.writeText(
+            txtPromptGerado.value
+        );
+
+        window.open(
+            "https://gemini.google.com/",
+            "_blank"
+        );
+
+    }catch{
+
+        alert("Não foi possível abrir o Gemini.");
 
     }
 
