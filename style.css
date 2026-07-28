@@ -887,7 +887,7 @@ MODAL PROMPTS
 
 .janelaPrompt{
 
-    width:900px;
+    width:760px;
     max-width:95%;
 
     max-height:90vh;
@@ -970,6 +970,8 @@ MODAL PROMPTS
 .textoPrompt{
 
     flex:1;
+    
+    min-height:320px;
 
     resize:none;
 
