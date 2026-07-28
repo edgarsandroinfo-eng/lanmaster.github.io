@@ -196,7 +196,15 @@ function renderizar(){
 
     atualizarResumo();
 
+   if(categoriaAtual === "Prompts"){
+
+    desenharPrompts();
+
+}else{
+
     desenharCards();
+
+}
 
 }
 
@@ -514,6 +522,78 @@ lista.sort((a, b) => {
                 <button onclick="concluir('${cartao.categoria}',${cartao.indice})">
 
                     <i class="fa-solid fa-check"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+
+/*=====================================================
+  PROMPTS
+=====================================================*/
+
+function desenharPrompts(){
+
+    const area = document.getElementById("cards");
+
+    area.innerHTML = "";
+
+    const lista = banco["Prompts"];
+
+    if(lista.length == 0){
+
+        area.innerHTML = `
+            <div class="card">
+                <h3>Nenhum prompt cadastrado.</h3>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    lista.forEach((item, indice)=>{
+
+        area.innerHTML += `
+
+        <div class="card">
+
+            <h3>${item.titulo}</h3>
+
+            <p>${item.prompt}</p>
+
+            <div class="data">
+
+                ${item.data}
+
+            </div>
+
+            <div class="acoes">
+
+                <button>
+
+                    🎨 Gerar
+
+                </button>
+
+                <button>
+
+                    ✏ Editar
+
+                </button>
+
+                <button>
+
+                    🗑 Excluir
 
                 </button>
 
