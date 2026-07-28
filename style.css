@@ -831,3 +831,52 @@ body{
     }
 
 }
+
+
+
+/*=====================================================
+  MENSAGEM DE SUCESSO
+=====================================================*/
+
+.mensagem-sucesso{
+
+    position: fixed;
+
+    top: 25px;
+    right: -450px;
+
+    background: #1e3a5f;
+    color: white;
+
+    padding: 16px 24px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+
+    z-index: 9999;
+
+    transition: right .45s ease;
+
+}
+
+.mensagem-sucesso.mostrar{
+
+    right: 25px;
+
+}
+
+.mensagem-sucesso i{
+
+    color: #39d353;
+
+    font-size: 22px;
+
+}

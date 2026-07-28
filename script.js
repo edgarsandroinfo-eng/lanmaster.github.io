@@ -611,9 +611,9 @@ async function favoritar(categoria,indice){
   CONCLUIR
 =====================================================*/
 
-async function concluir(categoria,indice){
+async function concluir(categoria, indice){
 
-    let cartao=banco[categoria][indice];
+    let cartao = banco[categoria][indice];
 
     banco[categoria].splice(indice,1);
 
@@ -622,6 +622,8 @@ async function concluir(categoria,indice){
     await salvarBanco();
 
     renderizar();
+
+    mostrarMensagemConclusao();
 
 }
 /*=====================================================
@@ -734,6 +736,35 @@ document.addEventListener("click",function(e){
     }
 
 });
+
+
+function mostrarMensagemConclusao(){
+
+    const msg = document.createElement("div");
+
+    msg.className = "mensagem-sucesso";
+
+    msg.innerHTML = `
+        <i class="fa-solid fa-circle-check"></i>
+        Parabéns! Mais uma tarefa concluída com sucesso.
+    `;
+
+    document.body.appendChild(msg);
+
+    setTimeout(()=>{
+        msg.classList.add("mostrar");
+    },10);
+
+    setTimeout(()=>{
+        msg.classList.remove("mostrar");
+
+        setTimeout(()=>{
+            msg.remove();
+        },400);
+
+    },2500);
+
+}
 
 
 window.favoritar = favoritar;
