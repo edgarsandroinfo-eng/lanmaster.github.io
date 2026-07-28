@@ -205,6 +205,8 @@ function atualizarTitulo(){
         "Investimentos":"fa-chart-line",
 
         "Marketing":"fa-bullhorn",
+	
+	"Prompts":"fa-wand-magic-sparkles",
 
         "Compras":"fa-cart-shopping",
 
@@ -227,6 +229,8 @@ function atualizarTitulo(){
         "Investimentos":"Controle de investimentos.",
 
         "Marketing":"Ideias e campanhas.",
+
+	"Prompts":"Biblioteca de prompts para geração de imagens.",
 
         "Compras":"Lista de compras.",
 
@@ -526,6 +530,18 @@ const btnAlta = document.querySelector(".prioridade.alta");
 const btnMedia = document.querySelector(".prioridade.media");
 const btnBaixa = document.querySelector(".prioridade.baixa");
 
+/*=====================================================
+  MODAL PROMPTS
+=====================================================*/
+
+const modalPrompt = document.getElementById("modalPrompt");
+
+const txtTituloPrompt = document.getElementById("txtTituloPrompt");
+const txtPrompt = document.getElementById("txtPrompt");
+
+const btnCancelarPrompt = document.getElementById("btnCancelarPrompt");
+const btnSalvarPrompt = document.getElementById("btnSalvarPrompt");
+
 function selecionarPrioridade(nivel){
 
     prioridadeSelecionada = nivel;
@@ -546,6 +562,16 @@ btnMedia.onclick = () => selecionarPrioridade("M");
 
 btnBaixa.onclick = () => selecionarPrioridade("B");
 
+
+function abrirNovoCadastro(){
+
+    if(categoriaAtual === "Prompts"){
+        novoPrompt();
+    }else{
+        novaAnotacao();
+    }
+
+}
 
 
 /*=====================================================
@@ -638,9 +664,7 @@ banco[categoriaAtual].push({
 const botaoNova=document.querySelector(".novo");
 
 if(botaoNova){
-
-    botaoNova.onclick=novaAnotacao;
-
+    botaoNova.onclick=abrirNovoCadastro;
 }
 
 /*=====================================================
@@ -751,9 +775,9 @@ if(pesquisa){
 BOTÕES DA INTERFACE
 =========================================*/
 
-document.getElementById("btnNova").onclick = novaAnotacao;
+document.getElementById("btnNova").onclick = abrirNovoCadastro;
 
-document.getElementById("btnNova2").onclick = novaAnotacao;
+document.getElementById("btnNova2").onclick = abrirNovoCadastro;
 
 document.getElementById("btnFavoritos").onclick = function(){
 
@@ -847,3 +871,22 @@ window.concluir = concluir;
 window.editarCartao = editarCartao;
 window.restaurar = restaurar;
 window.excluir = excluir;
+
+
+function novoPrompt(){
+
+    txtTituloPrompt.value = "";
+    txtPrompt.value = "";
+
+    modalPrompt.style.display = "flex";
+
+    txtTituloPrompt.focus();
+
+}
+
+
+btnCancelarPrompt.onclick = function(){
+
+    modalPrompt.style.display = "none";
+
+}
