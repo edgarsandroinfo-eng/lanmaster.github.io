@@ -405,6 +405,7 @@ function desenharCards(){
     }
 
     const pesquisa=document.getElementById("pesquisa");
+    const txtPesquisarPrompt = document.getElementById("txtPesquisarPrompt");
 
     let filtro="";
 
@@ -547,7 +548,32 @@ function desenharPrompts(){
 
     area.innerHTML = "";
 
-    const lista = banco["Prompts"];
+let lista = [...banco["Prompts"]];
+
+
+let filtro = "";
+
+if(txtPesquisarPrompt){
+
+    filtro = txtPesquisarPrompt.value.toLowerCase().trim();
+
+}
+
+if(filtro !== ""){
+
+    lista = lista.filter(item =>
+
+        item.titulo.toLowerCase().includes(filtro) ||
+
+        item.prompt.toLowerCase().includes(filtro)
+
+    );
+
+}
+
+
+
+
 
     if(lista.length == 0){
 
@@ -939,6 +965,11 @@ if(pesquisa){
 
 }
 
+if(txtPesquisarPrompt){
+
+    txtPesquisarPrompt.addEventListener("input", renderizar);
+
+}
 
 /*=========================================
 BOTÕES DA INTERFACE

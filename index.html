@@ -129,33 +129,47 @@ placeholder="Pesquisar anotações...">
 
         <section class="titulo">
 
-            <div>
+    <div>
 
-                <h1>
+        <h1>
+            <i class="fa-solid fa-list-check"></i>
+            Pendências
+        </h1>
 
-                    <i class="fa-solid fa-list-check"></i>
+        <span>
+            Suas tarefas e lembretes do dia.
+        </span>
 
-                    Pendências
+    </div>
 
-                </h1>
+    <button id="btnNova" class="novo">
 
-                <span>
+        <i class="fa-solid fa-plus"></i>
 
-                    Suas tarefas e lembretes do dia.
+        Nova Anotação
 
-                </span>
+    </button>
 
-            </div>
+</section>
 
-            <button id="btnNova" class="novo">
+<!-- PESQUISA DOS PROMPTS -->
+<div class="pesquisaPrompts">
 
-                <i class="fa-solid fa-plus"></i>
+    <i class="fa-solid fa-magnifying-glass"></i>
 
-                Nova Anotação
+    <input
+        type="text"
+        id="txtPesquisarPrompt"
+        placeholder="Pesquisar por título ou conteúdo..."
+    >
 
-            </button>
+</div>
 
-        </section>
+<section id="cards">
+
+    <!-- Os cartões serão criados pelo JavaScript -->
+
+</section>
 
         <section id="cards">
 
