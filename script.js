@@ -13,7 +13,7 @@ import {
 
 const CATEGORIAS = [
     "Pendências",
-    "Notas",
+    "Bloco de Notas",
     "Clientes",
     "VBA",
     "Investimentos",
@@ -186,27 +186,6 @@ function atualizarRelogio(){
 
 }
 
-/*=====================================================
-  RENDERIZAÇÃO
-=====================================================*/
-
-function renderizar(){
-
-    atualizarTitulo();
-
-    atualizarResumo();
-
-   if(categoriaAtual === "Prompts"){
-
-    desenharPrompts();
-
-}else{
-
-    desenharCards();
-
-}
-
-}
 
 /*=====================================================
   TÍTULO
@@ -224,7 +203,7 @@ function atualizarTitulo(){
 
         "Pendências":"fa-list-check",
 
-        "Notas":"fa-note-sticky",
+        "Bloco de Notas":"fa-note-sticky",
 
         "Clientes":"fa-address-book",
 
@@ -248,7 +227,7 @@ function atualizarTitulo(){
 
         "Pendências":"Suas tarefas e lembretes do dia.",
 
-        "Notas":"Anotações rápidas.",
+        "Bloco de Notas":"Anotações rápidas.",
 
         "Clientes":"Cadastro de clientes.",
 
@@ -645,7 +624,39 @@ lista.sort((a, b) =>
 
 }
 
+function desenharBlocoNotas(){
 
+    const area = document.getElementById("cards");
+
+    area.innerHTML = `
+        <div class="bloco-notas">
+            Em construção...
+        </div>
+    `;
+
+}
+
+function renderizar(){
+
+    atualizarTitulo();
+
+    atualizarResumo();
+
+    if(categoriaAtual === "Prompts"){
+
+        desenharPrompts();
+
+    }else if(categoriaAtual === "Bloco de Notas"){
+
+        desenharBlocoNotas();
+
+    }else{
+
+        desenharCards();
+
+    }
+
+}
 
 const modalNova = document.getElementById("modalNova");
 
