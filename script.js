@@ -187,6 +187,42 @@ function atualizarRelogio(){
 }
 
 
+
+function renderizar(){
+
+    atualizarTitulo();
+    atualizarResumo();
+
+    const cards = document.getElementById("cards");
+    const bloco = document.getElementById("blocoNotas");
+    const app = document.querySelector(".app");
+
+    if(categoriaAtual === "Bloco de Notas"){
+
+        cards.style.display = "none";
+        bloco.style.display = "block";
+        app.classList.add("modo-bloco");
+
+        desenharBlocoNotas();
+
+    }else{
+
+        cards.style.display = "grid";
+        bloco.style.display = "none";
+        app.classList.remove("modo-bloco");
+
+        if(categoriaAtual === "Prompts"){
+            desenharPrompts();
+        }else{
+            desenharCards();
+        }
+
+    }
+
+}
+
+
+
 /*=====================================================
   TÍTULO
 =====================================================*/
@@ -328,7 +364,7 @@ function atualizarResumo(){
 
         "qtNotas",
 
-        banco["Notas"].length
+        banco["Bloco de Notas"].length
 
     );
 
@@ -550,7 +586,7 @@ lista.sort((a, b) => {
 
 function desenharPrompts(){
 
-    const area = document.getElementById("blocoNotas");
+    const area = document.getElementById("cards");
 
     area.innerHTML = "";
 
