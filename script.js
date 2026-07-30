@@ -547,7 +547,20 @@ function desenharPrompts(){
 
     area.innerHTML = "";
 
-    const lista = banco["Prompts"];
+    const pesquisa = document.getElementById("pesquisa");
+
+let filtro = "";
+
+if (pesquisa) {
+    filtro = pesquisa.value.toLowerCase();
+}
+
+const lista = banco["Prompts"].filter(item => {
+    return (
+        item.titulo.toLowerCase().includes(filtro) ||
+        item.prompt.toLowerCase().includes(filtro)
+    );
+});
 
     if(lista.length == 0){
 
