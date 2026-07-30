@@ -628,14 +628,29 @@ function desenharBlocoNotas(){
 
     const area = document.getElementById("cards");
 
+    let texto = "";
+
+    if (banco["Bloco de Notas"].length > 0) {
+        texto = banco["Bloco de Notas"][0].texto || "";
+    }
+
     area.innerHTML = `
         <div class="bloco-notas">
-            Em construção...
+
+            <textarea
+                id="txtBlocoNotas"
+                placeholder="Digite aqui suas anotações..."
+            >${texto}</textarea>
+
+            <button id="btnOkBloco">
+                <i class="fa-solid fa-check"></i>
+                OK
+            </button>
+
         </div>
     `;
 
 }
-
 function renderizar(){
 
     atualizarTitulo();
