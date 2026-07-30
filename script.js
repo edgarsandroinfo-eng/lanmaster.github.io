@@ -260,23 +260,34 @@ function atualizarTitulo(){
 
 const btnNova = document.getElementById("btnNova");
 const btnNova2 = document.getElementById("btnNova2");
+const pesquisa = document.querySelector(".pesquisa");
+const subtitulo = document.querySelector(".titulo span");
+const painel = document.querySelector(".painel");
 
 
 if (categoriaAtual === "Bloco de Notas") {
 
     btnNova.style.display = "none";
 
-    if (btnNova2) {
-        btnNova2.style.display = "none";
-    }
+    if (btnNova2) btnNova2.style.display = "none";
 
-} else {
+    if (pesquisa) pesquisa.style.display = "none";
+
+    if (subtitulo) subtitulo.style.display = "none";
+
+    if (painel) painel.style.display = "none";
+
+}else{
 
     btnNova.style.display = "";
 
-    if (btnNova2) {
-        btnNova2.style.display = "";
-    }
+    if (btnNova2) btnNova2.style.display = "";
+
+    if (pesquisa) pesquisa.style.display = "flex";
+
+    if (subtitulo) subtitulo.style.display = "";
+
+    if (painel) painel.style.display = "";
 
 }
 
@@ -541,7 +552,7 @@ lista.sort((a, b) => {
 
 function desenharPrompts(){
 
-    const area = document.getElementById("cards");
+    const area = document.getElementById("blocoNotas");
 
     area.innerHTML = "";
 
@@ -626,15 +637,18 @@ lista.sort((a, b) =>
 
 function desenharBlocoNotas(){
 
-    const area = document.getElementById("cards");
+    const area = document.getElementById("blocoNotas");
 
     let texto = "";
 
-    if (banco["Bloco de Notas"].length > 0) {
+    if(banco["Bloco de Notas"].length > 0){
+
         texto = banco["Bloco de Notas"][0].texto || "";
+
     }
 
     area.innerHTML = `
+
         <div class="bloco-notas">
 
             <textarea
@@ -642,34 +656,47 @@ function desenharBlocoNotas(){
                 placeholder="Digite aqui suas anotações..."
             >${texto}</textarea>
 
-            <button id="btnOkBloco">
-                <i class="fa-solid fa-check"></i>
-                OK
-            </button>
+            <div class="rodapeBloco">
+
+                <button id="btnOkBloco">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Salvar
+
+                </button>
+
+            </div>
 
         </div>
+
     `;
 
+    document
+        .getElementById("btnOkBloco")
+        .onclick = salvarBlocoNotas;
+
 }
-function renderizar(){
 
-    atualizarTitulo();
 
-    atualizarResumo();
+async function salvarBlocoNotas(){
 
-    if(categoriaAtual === "Prompts"){
+    const texto =
+        document
+        .getElementById("txtBlocoNotas")
+        .value;
 
-        desenharPrompts();
+    banco["Bloco de Notas"] = [
 
-    }else if(categoriaAtual === "Bloco de Notas"){
+        {
+            texto: texto,
+            data: new Date().toLocaleString("pt-BR"),
+            timestamp: Date.now()
+        }
 
-        desenharBlocoNotas();
+    ];
 
-    }else{
-
-        desenharCards();
-
-    }
+    await salvarBanco();
 
 }
 
