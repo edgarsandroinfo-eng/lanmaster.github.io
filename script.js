@@ -731,6 +731,7 @@ async function salvarBlocoNotas(){
     ];
 
     await salvarBanco();
+    mostrarMensagemSalva();
 
 }
 
@@ -1152,6 +1153,34 @@ function mostrarMensagemConclusao(){
         },400);
 
     },2500);
+
+}
+
+function mostrarMensagemSalva(){
+
+    const msg = document.createElement("div");
+
+    msg.className = "mensagem-sucesso";
+
+    msg.innerHTML = `
+        <i class="fa-solid fa-floppy-disk"></i>
+        Anotações salvas com sucesso.
+    `;
+
+    document.body.appendChild(msg);
+
+    setTimeout(()=>{
+        msg.classList.add("mostrar");
+    },10);
+
+    setTimeout(()=>{
+        msg.classList.remove("mostrar");
+
+        setTimeout(()=>{
+            msg.remove();
+        },400);
+
+    },1800);
 
 }
 
