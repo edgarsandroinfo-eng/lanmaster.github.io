@@ -68,7 +68,7 @@ body{
 }
 
 .logo img{
-    width:170px;
+    width:240px;
     height:auto;
 }
 
@@ -1148,4 +1148,63 @@ MODAL CONFIRMAÇÃO
 
     min-width:120px;
 
+}
+
+.bloco-notas{
+    display:flex;
+    flex-direction:column;
+    height:calc(100vh - 210px);
+}
+
+#txtBlocoNotas{
+    flex:1;
+    width:100%;
+
+    resize:none;
+
+    border:none;
+    outline:none;
+
+    background:#1e293b;
+    color:#fff;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    font-size:18px;
+    line-height:1.7;
+
+    font-family:inherit;
+}
+
+#txtBlocoNotas::placeholder{
+    color:#94a3b8;
+}
+
+#btnOkBloco{
+
+    margin-top:15px;
+
+    align-self:flex-end;
+
+    background:#2563eb;
+
+    color:#fff;
+
+    border:none;
+
+    padding:12px 30px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+#btnOkBloco:hover{
+    background:#1d4ed8;
 }
