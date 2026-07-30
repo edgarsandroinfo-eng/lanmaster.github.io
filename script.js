@@ -13,7 +13,7 @@ import {
 
 const CATEGORIAS = [
     "Pendências",
-   "Bloco de Notas",
+    "Notas",
     "Clientes",
     "VBA",
     "Investimentos",
@@ -196,13 +196,9 @@ function renderizar(){
 
     atualizarResumo();
 
- if(categoriaAtual === "Prompts"){
+   if(categoriaAtual === "Prompts"){
 
     desenharPrompts();
-
-}else if(categoriaAtual === "Bloco de Notas"){
-
-    desenharBlocoNotas();
 
 }else{
 
@@ -228,7 +224,7 @@ function atualizarTitulo(){
 
         "Pendências":"fa-list-check",
 
-        "Bloco de Notas":"fa-note-sticky",
+        "Notas":"fa-note-sticky",
 
         "Clientes":"fa-address-book",
 
@@ -252,7 +248,7 @@ function atualizarTitulo(){
 
         "Pendências":"Suas tarefas e lembretes do dia.",
 
-        "Bloco de Notas":"Anotações rápidas.",
+        "Notas":"Anotações rápidas.",
 
         "Clientes":"Cadastro de clientes.",
 
@@ -285,6 +281,25 @@ function atualizarTitulo(){
 
 const btnNova = document.getElementById("btnNova");
 const btnNova2 = document.getElementById("btnNova2");
+
+
+if (categoriaAtual === "Bloco de Notas") {
+
+    btnNova.style.display = "none";
+
+    if (btnNova2) {
+        btnNova2.style.display = "none";
+    }
+
+} else {
+
+    btnNova.style.display = "";
+
+    if (btnNova2) {
+        btnNova2.style.display = "";
+    }
+
+}
 
 const textoBotao =
     categoriaAtual === "Prompts"
@@ -551,7 +566,7 @@ function desenharPrompts(){
 
     area.innerHTML = "";
 
-    const pesquisa = document.getElementById("pesquisa");
+   const pesquisa = document.getElementById("pesquisa");
 
 let filtro = "";
 
@@ -559,12 +574,14 @@ if (pesquisa) {
     filtro = pesquisa.value.toLowerCase();
 }
 
-const lista = banco["Prompts"].filter(item => {
-    return (
-        item.titulo.toLowerCase().includes(filtro) ||
-        item.prompt.toLowerCase().includes(filtro)
-    );
-});
+const lista = banco["Prompts"].filter(item =>
+    item.titulo.toLowerCase().includes(filtro) ||
+    item.prompt.toLowerCase().includes(filtro)
+);
+
+lista.sort((a, b) =>
+    (b.timestamp || 0) - (a.timestamp || 0)
+);
 
     if(lista.length == 0){
 
@@ -628,17 +645,7 @@ const lista = banco["Prompts"].filter(item => {
 
 }
 
-function desenharBlocoNotas(){
 
-    const area = document.getElementById("cards");
-
-    area.innerHTML = `
-        <div class="bloco-notas">
-            Em construção...
-        </div>
-    `;
-
-}
 
 const modalNova = document.getElementById("modalNova");
 
