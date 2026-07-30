@@ -404,6 +404,15 @@ body{
         grid-template-columns:1fr;
     }
 
+    #blocoNotas{
+        height:calc(100dvh - 160px);
+    }
+
+    .bloco-notas{
+        height:100%;
+    }
+
+}
 
 .card p{
     -webkit-line-clamp:3;
