@@ -261,9 +261,7 @@ function atualizarTitulo(){
 const btnNova = document.getElementById("btnNova");
 const btnNova2 = document.getElementById("btnNova2");
 const pesquisa = document.querySelector(".pesquisa");
-const subtitulo = document.querySelector(".titulo span");
 const painel = document.querySelector(".painel");
-
 
 if (categoriaAtual === "Bloco de Notas") {
 
