@@ -412,7 +412,7 @@ function atualizarBadges(){
     document.getElementById("badgeClientes").textContent =
         banco["Clientes"].length;
 
-    document.getElementById("badgeProgramação").textContent =
+    document.getElementById("badgeProgramacao").textContent =
         banco["Programação"].length;
 
     document.getElementById("badgeInvestimentos").textContent =
