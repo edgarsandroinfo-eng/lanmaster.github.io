@@ -1277,3 +1277,30 @@ MODAL CONFIRMAÇÃO
     }
 
 }
+
+
+.textoMenu{
+
+    flex:1;
+
+}
+
+.badgeMenu{
+
+    min-width:26px;
+
+    padding:2px 8px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}

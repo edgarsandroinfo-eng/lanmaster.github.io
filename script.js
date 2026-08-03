@@ -192,6 +192,7 @@ function renderizar(){
 
     atualizarTitulo();
     atualizarResumo();
+    atualizarBadges();
 
     const cards = document.getElementById("cards");
     const bloco = document.getElementById("blocoNotas");
@@ -397,6 +398,43 @@ function atualizarNumero(id,valor){
     }
 
 }
+
+
+
+function atualizarBadges(){
+
+    document.getElementById("badgePendencias").textContent =
+        banco["Pendências"].length;
+
+    document.getElementById("badgeNotas").textContent =
+        banco["Bloco de Notas"].length;
+
+    document.getElementById("badgeClientes").textContent =
+        banco["Clientes"].length;
+
+    document.getElementById("badgeProgramação").textContent =
+        banco["Programação"].length;
+
+    document.getElementById("badgeInvestimentos").textContent =
+        banco["Investimentos"].length;
+
+    document.getElementById("badgeMarketing").textContent =
+        banco["Marketing"].length;
+
+    document.getElementById("badgeCompras").textContent =
+        banco["Compras"].length;
+
+    document.getElementById("badgePrompts").textContent =
+        banco["Prompts"].length;
+
+    document.getElementById("badgeFavoritos").textContent =
+        banco["Favoritos"].length;
+
+    document.getElementById("badgeConcluidos").textContent =
+        banco["Concluídos"].length;
+
+}
+
 
 /*=====================================================
   CARDS
