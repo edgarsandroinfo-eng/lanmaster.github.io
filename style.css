@@ -432,38 +432,10 @@ body{
         -webkit-line-clamp:3;
         min-height:78px;
     }
+  
+ }
 
-    #blocoNotas{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    flex:1;
-}
 
-.bloco-notas{
-    display:flex;
-    flex-direction:column;
-    flex:1;
-    width:100%;
-}
-
-#txtBlocoNotas{
-    width:100%;
-    flex:1;
-    min-height:60vh;
-    resize:none;
-
-    background:#1e293b;
-    color:#fff;
-
-    border:none;
-    border-radius:14px;
-
-    padding:25px;
-
-    font-size:18px;
-    line-height:1.8;
-}
 /* ==========================================================
    MENU MOBILE
 ========================================================== */
