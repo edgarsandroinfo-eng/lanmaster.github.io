@@ -636,13 +636,20 @@ if (pesquisa) {
     filtro = pesquisa.value.toLowerCase();
 }
 
-const lista = banco["Prompts"].filter(item =>
-    item.titulo.toLowerCase().includes(filtro) ||
-    item.prompt.toLowerCase().includes(filtro)
-);
+const lista = banco["Prompts"]
+    .map((item, indice) => ({
+        item,
+        indiceOriginal: indice
+    }))
+    .filter(obj =>
+        obj.item.titulo.toLowerCase().includes(filtro) ||
+        obj.item.prompt.toLowerCase().includes(filtro)
+    );
+
 
 lista.sort((a, b) =>
-    (b.timestamp || 0) - (a.timestamp || 0)
+    (b.item.timestamp || 0) -
+    (a.item.timestamp || 0)
 );
 
     if(lista.length == 0){
@@ -657,7 +664,9 @@ lista.sort((a, b) =>
 
     }
 
-    lista.forEach((item, indice)=>{
+    lista.forEach(obj => {
+
+    const item = obj.item;
 
         area.innerHTML += `
 
@@ -675,7 +684,7 @@ lista.sort((a, b) =>
 
             <div class="acoes">
 
-    <button onclick="gerarPrompt(${indice})">
+    <button onclick="gerarPrompt(${obj.indiceOriginal})">
 
         <i class="fa-solid fa-wand-magic-sparkles"></i>
 
@@ -683,7 +692,7 @@ lista.sort((a, b) =>
 
     </button>
 
-    <button onclick="editarPrompt(${indice})">
+    <button onclick="editarPrompt(${obj.indiceOriginal})">
 
         <i class="fa-solid fa-pen"></i>
 
@@ -691,7 +700,7 @@ lista.sort((a, b) =>
 
     </button>
 
-    <button onclick="excluirPrompt(${indice})">
+    <button onclick="excluirPrompt(${obj.indiceOriginal})">
 
         <i class="fa-solid fa-trash"></i>
 
