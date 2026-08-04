@@ -889,8 +889,6 @@ const btnCancelarServico =
 const btnSalvarServico =
     document.getElementById("btnSalvarServico");
 
-let indiceEdicaoServico = -1;
-
 /*=====================================================
 MODAL GERAR PROMPT
 =====================================================*/
