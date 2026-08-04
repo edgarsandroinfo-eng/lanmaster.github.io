@@ -438,6 +438,103 @@ placeholder="Pesquisar anotações...">
 </div>
 
 
+
+<!-- =========================================
+MODAL SERVIÇOS
+========================================= -->
+
+<div id="modalServico" class="modal">
+
+    <div class="janelaServico">
+
+        <div class="cabecalhoPrompt">
+
+            <h2>
+                <i class="fa-solid fa-briefcase"></i>
+                Novo Serviço
+            </h2>
+
+        </div>
+
+        <div class="corpoPrompt">
+
+            <label>Nome do Serviço</label>
+
+            <input
+                type="text"
+                id="txtNomeServico"
+                class="campoPrompt">
+
+            <label>Descrição</label>
+
+            <textarea
+                id="txtDescricaoServico"
+                class="textoPrompt"></textarea>
+
+            <label>Prompt Associado</label>
+
+            <select
+                id="cmbPromptServico"
+                class="campoPrompt">
+
+                <option value="">Selecione um Prompt...</option>
+
+            </select>
+
+            <label>Status</label>
+
+            <div class="statusServico">
+
+                <label>
+                    <input
+                        type="radio"
+                        name="statusServico"
+                        value="Ativo"
+                        checked>
+
+                    🟢 Ativo
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="statusServico"
+                        value="Inativo">
+
+                    ⚪ Inativo
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="rodapePrompt">
+
+            <button
+                id="btnCancelarServico"
+                class="btnSecundario">
+
+                Cancelar
+
+            </button>
+
+            <button
+                id="btnSalvarServico"
+                class="btnPrincipal">
+
+                Salvar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
 <!-- MODAL CONFIRMAÇÃO -->
 
 <div id="modalConfirmar" class="modal">

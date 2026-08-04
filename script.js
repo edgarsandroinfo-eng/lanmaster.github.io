@@ -1291,6 +1291,55 @@ function novoPrompt(){
 }
 
 
+
+function novoServico(){
+
+    document.querySelector("#modalServico h2").innerHTML = `
+        <i class="fa-solid fa-briefcase"></i>
+        Novo Serviço
+    `;
+
+    document.getElementById("txtNomeServico").value = "";
+    document.getElementById("txtDescricaoServico").value = "";
+
+    document.getElementById("cmbPromptServico").selectedIndex = 0;
+
+    document.querySelector(
+        'input[name="statusServico"][value="Ativo"]'
+    ).checked = true;
+
+carregarPromptsServico();
+
+    document.getElementById("modalServico").style.display = "flex";
+
+    document.getElementById("txtNomeServico").focus();
+
+}
+
+
+function carregarPromptsServico(){
+
+    const combo = document.getElementById("cmbPromptServico");
+
+    combo.innerHTML =
+        '<option value="">Selecione um Prompt...</option>';
+
+    banco["Prompts"].forEach((prompt, indice)=>{
+
+        const opcao = document.createElement("option");
+
+        opcao.value = indice;
+
+        opcao.textContent = prompt.titulo;
+
+        combo.appendChild(opcao);
+
+    });
+
+}
+
+
+
 function editarPrompt(indice){
 
     indiceEdicaoPrompt = indice;
