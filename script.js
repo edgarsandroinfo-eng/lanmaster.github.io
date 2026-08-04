@@ -867,6 +867,30 @@ const txtPrompt = document.getElementById("txtPrompt");
 const btnCancelarPrompt = document.getElementById("btnCancelarPrompt");
 const btnSalvarPrompt = document.getElementById("btnSalvarPrompt");
 
+
+/*=====================================================
+MODAL SERVIÇOS
+=====================================================*/
+
+const modalServico = document.getElementById("modalServico");
+
+const txtNomeServico =
+    document.getElementById("txtNomeServico");
+
+const txtDescricaoServico =
+    document.getElementById("txtDescricaoServico");
+
+const cmbPromptServico =
+    document.getElementById("cmbPromptServico");
+
+const btnCancelarServico =
+    document.getElementById("btnCancelarServico");
+
+const btnSalvarServico =
+    document.getElementById("btnSalvarServico");
+
+let indiceEdicaoServico = -1;
+
 /*=====================================================
 MODAL GERAR PROMPT
 =====================================================*/
@@ -900,7 +924,7 @@ const btnNao = document.getElementById("btnNao");
 
 let acaoConfirmada = null;
 let indiceEdicaoPrompt = -1;
-
+let indiceEdicaoServico = -1;
 
 function abrirConfirmacao(texto, acao){
 
@@ -1495,6 +1519,56 @@ btnFecharGerado.onclick = function(){
 btnCancelarPrompt.onclick = function(){
 
     modalPrompt.style.display = "none";
+
+}
+
+
+btnCancelarServico.onclick = function(){
+
+    modalServico.style.display = "none";
+
+}
+
+
+btnSalvarServico.onclick = async function(){
+
+    if(txtNomeServico.value.trim() == ""){
+
+        alert("Informe o nome do serviço.");
+
+        txtNomeServico.focus();
+
+        return;
+
+    }
+
+    const agora = new Date();
+
+    banco["Serviços"].push({
+
+        id: Date.now(),
+
+        nome: txtNomeServico.value.trim(),
+
+        descricao: txtDescricaoServico.value.trim(),
+
+        prompt: cmbPromptServico.value,
+
+        status: document.querySelector(
+            'input[name="statusServico"]:checked'
+        ).value,
+
+        data: agora.toLocaleString("pt-BR"),
+
+        timestamp: Date.now()
+
+    });
+
+    await salvarBanco();
+
+    modalServico.style.display = "none";
+
+    renderizar();
 
 }
 
