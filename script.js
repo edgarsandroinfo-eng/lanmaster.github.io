@@ -213,11 +213,19 @@ function renderizar(){
         bloco.style.display = "none";
         app.classList.remove("modo-bloco");
 
-        if(categoriaAtual === "Prompts"){
-            desenharPrompts();
-        }else{
-            desenharCards();
-        }
+      if(categoriaAtual === "Prompts"){
+
+    desenharPrompts();
+
+}else if(categoriaAtual === "Serviços"){
+
+    desenharServicos();
+
+}else{
+
+    desenharCards();
+
+}
 
     }
 
@@ -723,6 +731,35 @@ lista.sort((a, b) =>
     });
 
 }
+
+
+function desenharServicos(){
+
+    const area = document.getElementById("cards");
+
+    area.innerHTML = "";
+
+    if(banco["Serviços"].length == 0){
+
+        area.innerHTML = `
+            <div class="card">
+
+                <h3>Nenhum serviço cadastrado.</h3>
+
+                <p>
+                    Clique em <strong>Novo Serviço</strong>
+                    para cadastrar o primeiro serviço.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+}
+
 
 function desenharBlocoNotas(){
 
