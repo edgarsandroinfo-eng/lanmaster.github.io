@@ -750,7 +750,6 @@ function desenharServicos(){
 
         area.innerHTML = `
             <div class="card">
-
                 <h3>Nenhum serviço cadastrado.</h3>
 
                 <p>
@@ -765,8 +764,49 @@ function desenharServicos(){
 
     }
 
-}
+    banco["Serviços"].forEach((servico, indice)=>{
 
+        area.innerHTML += `
+
+            <div class="card">
+
+                <h3>${servico.nome}</h3>
+
+                <p>${servico.descricao}</p>
+
+                <div class="data">
+
+                    ${servico.data}
+
+                </div>
+
+                <div class="acoes">
+
+                    <button onclick="editarServico(${indice})">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                        Editar
+
+                    </button>
+
+                    <button onclick="excluirServico(${indice})">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                        Excluir
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
 
 function desenharBlocoNotas(){
 
@@ -1550,7 +1590,7 @@ btnSalvarServico.onclick = async function(){
 
         descricao: txtDescricaoServico.value.trim(),
 
-        prompt: cmbPromptServico.value,
+    prompt: banco["Prompts"][cmbPromptServico.value]?.titulo || "",
 
         status: document.querySelector(
             'input[name="statusServico"]:checked'
