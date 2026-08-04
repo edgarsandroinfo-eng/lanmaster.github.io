@@ -19,6 +19,7 @@ const CATEGORIAS = [
     "Investimentos",
     "Marketing",
     "Prompts",
+    "Serviços",
     "Compras",
     "Favoritos",
     "Concluídos"
@@ -252,6 +253,8 @@ function atualizarTitulo(){
 	
 	"Prompts":"fa-wand-magic-sparkles",
 
+        "Serviços":"fa-briefcase",
+
         "Compras":"fa-cart-shopping",
 
         "Favoritos":"fa-star",
@@ -275,6 +278,8 @@ function atualizarTitulo(){
         "Marketing":"Ideias e campanhas.",
 
 	"Prompts":"Biblioteca de prompts para geração de imagens.",
+
+	"Serviços":"Cadastro dos serviços oferecidos pela Lan Master.",
 
         "Compras":"Lista de compras.",
 
@@ -426,6 +431,9 @@ function atualizarBadges(){
 
     document.getElementById("badgePrompts").textContent =
         banco["Prompts"].length;
+
+    document.getElementById("badgeServicos").textContent =
+        banco["Serviços"].length;
 
     document.getElementById("badgeFavoritos").textContent =
         banco["Favoritos"].length;
