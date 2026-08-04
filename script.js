@@ -1408,6 +1408,7 @@ function novoPrompt(){
 
 function novoServico(){
 
+    indiceEdicaoServico = -1;
     document.querySelector("#modalServico h2").innerHTML = `
         <i class="fa-solid fa-briefcase"></i>
         Novo Serviço
@@ -1429,6 +1430,49 @@ carregarPromptsServico();
     document.getElementById("txtNomeServico").focus();
 
 }
+
+
+
+
+function editarServico(indice){
+
+    indiceEdicaoServico = indice;
+
+    const servico = banco["Serviços"][indice];
+
+    txtNomeServico.value = servico.nome;
+
+    txtDescricaoServico.value = servico.descricao;
+
+    carregarPromptsServico();
+
+    // Seleciona o Prompt correspondente
+    for(let i = 0; i < cmbPromptServico.options.length; i++){
+
+        if(cmbPromptServico.options[i].text === servico.prompt){
+
+            cmbPromptServico.selectedIndex = i;
+            break;
+
+        }
+
+    }
+
+    document.querySelector(
+        `input[name="statusServico"][value="${servico.status}"]`
+    ).checked = true;
+
+    document.querySelector("#modalServico h2").innerHTML = `
+        <i class="fa-solid fa-briefcase"></i>
+        Editar Serviço
+    `;
+
+    modalServico.style.display = "flex";
+
+    txtNomeServico.focus();
+
+}
+
 
 
 function carregarPromptsServico(){
@@ -1567,91 +1611,53 @@ btnCancelarServico.onclick = function(){
 
 }
 
-
 btnSalvarServico.onclick = async function(){
 
     if(txtNomeServico.value.trim() == ""){
 
         alert("Informe o nome do serviço.");
-
         txtNomeServico.focus();
-
         return;
 
     }
 
-    const agora = new Date();
+    const dadosServico = {
 
-    banco["Serviços"].push({
-
-        id: Date.now(),
+        id: indiceEdicaoServico == -1
+            ? Date.now()
+            : banco["Serviços"][indiceEdicaoServico].id,
 
         nome: txtNomeServico.value.trim(),
 
         descricao: txtDescricaoServico.value.trim(),
 
-    prompt: banco["Prompts"][cmbPromptServico.value]?.titulo || "",
+        prompt: banco["Prompts"][cmbPromptServico.value]?.titulo || "",
 
         status: document.querySelector(
             'input[name="statusServico"]:checked'
         ).value,
 
-        data: agora.toLocaleString("pt-BR"),
+        data: new Date().toLocaleString("pt-BR"),
 
         timestamp: Date.now()
 
-    });
+    };
 
-    await salvarBanco();
+    if(indiceEdicaoServico == -1){
 
-    modalServico.style.display = "none";
-
-    renderizar();
-
-}
-
-
-btnSalvarPrompt.onclick = async function(){
-
-    if(txtTituloPrompt.value.trim() == ""){
-
-        alert("Informe um título.");
-
-        txtTituloPrompt.focus();
-
-        return;
-
-    }
-
-    if(indiceEdicaoPrompt == -1){
-
-        const agora = new Date();
-
-        banco["Prompts"].push({
-
-            titulo: txtTituloPrompt.value.trim(),
-
-            prompt: txtPrompt.value.trim(),
-
-            data: agora.toLocaleString("pt-BR"),
-
-            timestamp: Date.now()
-
-        });
+        banco["Serviços"].push(dadosServico);
 
     }else{
 
-        banco["Prompts"][indiceEdicaoPrompt].titulo =
-            txtTituloPrompt.value.trim();
-
-        banco["Prompts"][indiceEdicaoPrompt].prompt =
-            txtPrompt.value.trim();
+        banco["Serviços"][indiceEdicaoServico] = dadosServico;
 
     }
 
     await salvarBanco();
 
-    modalPrompt.style.display = "none";
+    indiceEdicaoServico = -1;
+
+    modalServico.style.display = "none";
 
     renderizar();
 
