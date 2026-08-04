@@ -1377,6 +1377,27 @@ async function excluirPrompt(indice){
 
 }
 
+
+async function excluirServico(indice){
+
+    abrirConfirmacao(
+
+        "Deseja realmente excluir este serviço?",
+
+        async function(){
+
+            banco["Serviços"].splice(indice,1);
+
+            await salvarBanco();
+
+            renderizar();
+
+        }
+
+    );
+
+}
+
 window.favoritar = favoritar;
 window.concluir = concluir;
 window.editarCartao = editarCartao;
@@ -1386,6 +1407,7 @@ window.excluir = excluir;
 window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
 window.gerarPrompt = gerarPrompt;
+window.excluirServico = excluirServico;
 
 
 function novoPrompt(){
