@@ -1072,6 +1072,173 @@ MODAL PROMPTS
 
 }
 
+
+
+/*=====================================================
+MODAL SERVIÇOS
+=====================================================*/
+
+.janelaServico{
+
+    width:760px;
+    max-width:95%;
+
+    max-height:90vh;
+
+    background:#141c2f;
+
+    border-radius:18px;
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.cabecalhoServico{
+
+    padding:28px 35px;
+
+    border-bottom:1px solid #27334d;
+
+}
+
+.cabecalhoServico h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:38px;
+
+}
+
+.corpoServico{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:30px 35px;
+
+    overflow-y:auto;
+
+}
+
+.corpoServico label{
+
+    color:#fff;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+    margin-top:18px;
+
+}
+
+.campoServico{
+
+    height:55px;
+
+    border-radius:14px;
+
+    border:1px solid #3f6ec9;
+
+    background:#11192c;
+
+    color:#fff;
+
+    padding:0 18px;
+
+    font-size:18px;
+
+}
+
+.textoServico{
+
+    min-height:220px;
+
+    resize:none;
+
+    border-radius:14px;
+
+    border:1px solid #31486e;
+
+    background:#11192c;
+
+    color:#fff;
+
+    padding:18px;
+
+    font-size:17px;
+
+    line-height:1.6;
+
+}
+
+.selectServico{
+
+    height:55px;
+
+    border-radius:14px;
+
+    border:1px solid #3f6ec9;
+
+    background:#11192c;
+
+    color:#fff;
+
+    padding:0 18px;
+
+    font-size:17px;
+
+}
+
+.statusServico{
+
+    display:flex;
+
+    gap:30px;
+
+    margin-top:8px;
+
+}
+
+.statusServico label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    cursor:pointer;
+
+    margin:0;
+
+}
+
+.rodapeServico{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:25px 35px;
+
+    border-top:1px solid #27334d;
+
+}
+
+
 /*=====================================================
 MODAL CONFIRMAÇÃO
 =====================================================*/
