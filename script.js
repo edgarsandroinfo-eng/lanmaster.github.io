@@ -339,10 +339,17 @@ if (categoriaAtual === "Bloco de Notas") {
 
 }
 
-const textoBotao =
-    categoriaAtual === "Prompts"
-        ? "Novo Prompt"
-        : "Nova Anotação";
+let textoBotao = "Nova Anotação";
+
+if(categoriaAtual === "Prompts"){
+
+    textoBotao = "Novo Prompt";
+
+}else if(categoriaAtual === "Serviços"){
+
+    textoBotao = "Novo Serviço";
+
+}
 
 if (btnNova) {
     btnNova.innerHTML = `
@@ -949,9 +956,17 @@ btnBaixa.onclick = () => selecionarPrioridade("B");
 function abrirNovoCadastro(){
 
     if(categoriaAtual === "Prompts"){
+
         novoPrompt();
+
+    }else if(categoriaAtual === "Serviços"){
+
+        novoServico();
+
     }else{
+
         novaAnotacao();
+
     }
 
 }
