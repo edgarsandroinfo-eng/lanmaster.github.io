@@ -821,17 +821,31 @@ function desenharPropagandasDoDia(){
 
     painel.style.display = "block";
 
-    lista.innerHTML = `
-    
+   const servicos = obterServicosDoDia();
+
+lista.innerHTML = "";
+
+servicos.forEach(servico=>{
+
+    lista.innerHTML += `
+
         <div class="card">
 
-            <h3>📢 Propagandas do Dia</h3>
+            <h3>${servico.nome}</h3>
 
-            <p>Teste da versão 2.0</p>
+            <p>${servico.descricao}</p>
+
+            <button>
+
+                Abrir Prompt
+
+            </button>
 
         </div>
 
     `;
+
+});
 
 }
 
