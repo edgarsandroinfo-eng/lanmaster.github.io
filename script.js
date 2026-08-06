@@ -1,6 +1,6 @@
 /* =====================================================
    LAN MASTER ANOTAÇÕES
-   SCRIPT.JS
+   SCRIPT.f
    BLOCO 1 - NÚCLEO DO SISTEMA
 ===================================================== */
 
@@ -89,6 +89,8 @@ if (alterouBanco) {
     configurarMenu();
 
     renderizar();
+	
+	console.log(obterServicosDoDia());
 
 }
 
@@ -1398,6 +1400,37 @@ async function excluirServico(indice){
 
 }
 
+
+function obterServicosDoDia(){
+
+    const ativos = banco["Serviços"].filter(servico =>
+
+        servico.status === "Ativo" &&
+
+        servico.divulgadoNoCiclo === false
+
+    );
+
+    if(ativos.length === 0){
+
+        banco["Serviços"].forEach(servico=>{
+
+            servico.divulgadoNoCiclo = false;
+
+        });
+
+        return obterServicosDoDia();
+
+    }
+
+    ativos.sort(()=>Math.random()-0.5);
+
+    return ativos.slice(0,2);
+
+}
+
+
+
 window.favoritar = favoritar;
 window.concluir = concluir;
 window.editarCartao = editarCartao;
@@ -1658,6 +1691,13 @@ btnSalvarServico.onclick = async function(){
         status: document.querySelector(
             'input[name="statusServico"]:checked'
         ).value,
+		
+		
+		ultimaPropaganda: "",
+
+divulgadoNoCiclo: false,
+
+totalDivulgacoes: 0,
 
         data: new Date().toLocaleString("pt-BR"),
 
