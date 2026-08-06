@@ -862,7 +862,7 @@ function desenharPropagandasDoDia(){
 
         return;
 
-    }
+    };
 
     servicosHoje.forEach(servico=>{
 
