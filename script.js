@@ -26,6 +26,15 @@ const CATEGORIAS = [
 ];
 
 
+const CONFIGURACAO_PADRAO = {
+
+    dataPropaganda: "",
+
+    propagandasHoje: []
+
+};
+
+
 let categoriaAtual = "Pendências";
 
 let banco = {};
@@ -68,6 +77,17 @@ CATEGORIAS.forEach(cat => {
 
 });
 
+
+
+if(!banco.Configuracoes){
+
+    banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
+
+    alterouBanco = true;
+
+}
+
+
 if (alterouBanco) {
 
     await salvarBanco();
@@ -107,6 +127,8 @@ function criarBanco(){
         banco[cat]=[];
 
     });
+
+    banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
 
 }
 
@@ -818,10 +840,16 @@ function desenharPropagandasDoDia(){
     const painel = document.getElementById("propagandasDia");
 
     const lista = document.getElementById("listaPropagandas");
+	
+	sortearPropagandasDoDia();
 
     painel.style.display = "block";
 
-   const servicos = obterServicosDoDia();
+const servicos = banco.Configuracoes.propagandasHoje
+    .map(item =>
+        banco["Serviços"].find(servico => servico.id === item.id)
+    )
+    .filter(Boolean);
 
 lista.innerHTML = "";
 
@@ -1500,6 +1528,66 @@ function obterServicosDoDia(){
     return ativos.slice(0,2);
 
 }
+
+
+function sortearPropagandasDoDia(){
+
+    const hoje = new Date().toLocaleDateString("pt-BR");
+
+    // Se já sorteou hoje, não faz nada
+    if(banco.Configuracoes.dataPropaganda === hoje){
+
+        return;
+
+    }
+
+    // Serviços ativos que ainda não foram divulgados
+    let disponiveis = banco["Serviços"].filter(servico=>
+
+        servico.status === "Ativo" &&
+
+        servico.divulgadoNoCiclo === false
+
+    );
+
+    // Se acabou o ciclo, reinicia
+    if(disponiveis.length === 0){
+
+        banco["Serviços"].forEach(servico=>{
+
+            servico.divulgadoNoCiclo = false;
+
+        });
+
+        disponiveis = banco["Serviços"].filter(servico=>
+
+            servico.status === "Ativo"
+
+        );
+
+    }
+
+    // Embaralha
+    disponiveis.sort(()=>Math.random()-0.5);
+
+    // Guarda somente os IDs
+   banco.Configuracoes.propagandasHoje =
+    disponiveis
+        .slice(0,2)
+        .map(servico => ({
+
+            id: servico.id,
+
+            concluido: false
+
+        }));
+
+    banco.Configuracoes.dataPropaganda = hoje;
+
+    salvarBanco();
+
+}
+
 
 window.favoritar = favoritar;
 window.concluir = concluir;
