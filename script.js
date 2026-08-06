@@ -213,9 +213,9 @@ function atualizarRelogio(){
 
 
 
-function renderizar(){
+async function renderizar(){
 
-    desenharPropagandasDoDia();
+    await desenharPropagandasDoDia();
 	atualizarTitulo();
     atualizarResumo();
     atualizarBadges();
@@ -835,27 +835,87 @@ function desenharServicos(){
 
 
 
-function desenharPropagandasDoDia(){
+
+
+async function desenharPropagandasDoDia(){
 
     const painel = document.getElementById("propagandasDia");
-
     const lista = document.getElementById("listaPropagandas");
-	
-	sortearPropagandasDoDia();
+
+   await prepararNovoDia();
 
     painel.style.display = "block";
 
-const servicos = banco.Configuracoes.propagandasHoje
-    .map(item =>
-        banco["Serviços"].find(servico => servico.id === item.id)
-    )
-    .filter(Boolean);
+    lista.innerHTML = "";
 
-lista.innerHTML = "";
+    const servicosHoje = banco["Serviços"].filter(servico =>
 
-servicos.forEach(servico=>{
+        servico.metaHoje === true
+
+    );
+
+    if(servicosHoje.length === 0){
+
+        lista.innerHTML = `
+
+            <div class="card">
+
+                <h3>✅ Meta diária concluída</h3>
+
+                <p>
+
+                    Volte amanhã para receber
+                    mais 2 propagandas.
+
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+    servicosHoje.forEach(servico=>{
+
+        lista.innerHTML += `
+
+            <div class="card">
+
+                <h3>${servico.nome}</h3>
+
+                <p>${servico.descricao}</p>
+
+                <div class="acoes">
+
+                    <button onclick="abrirPromptServico('${servico.prompt}')">
+
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                        Abrir Prompt
+
+                    </button>
+
+                    <button onclick="concluirPropaganda(${servico.id})">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Concluído
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
 
 }
+
+
 
 function abrirPromptServico(tituloPrompt){
 
@@ -1528,19 +1588,25 @@ function obterServicosDoDia(){
 
 }
 
-
-function sortearPropagandasDoDia(){
+async function prepararNovoDia(){
 
     const hoje = new Date().toLocaleDateString("pt-BR");
 
-    // Se já sorteou hoje, não faz nada
+    // Se já preparou hoje, não faz nada
     if(banco.Configuracoes.dataPropaganda === hoje){
 
         return;
 
     }
 
-    // Serviços ativos que ainda não foram divulgados
+    // Limpa a meta do dia anterior
+    banco["Serviços"].forEach(servico=>{
+
+        servico.metaHoje = false;
+
+    });
+
+    // Serviços ativos que ainda não passaram pelo ciclo
     let disponiveis = banco["Serviços"].filter(servico=>
 
         servico.status === "Ativo" &&
@@ -1549,8 +1615,8 @@ function sortearPropagandasDoDia(){
 
     );
 
-    // Se acabou o ciclo, reinicia
-    if(disponiveis.length === 0){
+    // Terminou o ciclo?
+    if(disponiveis.length < 2){
 
         banco["Serviços"].forEach(servico=>{
 
@@ -1569,21 +1635,18 @@ function sortearPropagandasDoDia(){
     // Embaralha
     disponiveis.sort(()=>Math.random()-0.5);
 
-    // Guarda somente os IDs
-   banco.Configuracoes.propagandasHoje =
-    disponiveis
-        .slice(0,2)
-        .map(servico => ({
+    // Marca apenas 2 para hoje
+    disponiveis.slice(0,2).forEach(servico=>{
 
-            id: servico.id,
+        servico.metaHoje = true;
 
-            concluido: false
-
-        }));
+    });
 
     banco.Configuracoes.dataPropaganda = hoje;
 
-    salvarBanco();
+    await salvarBanco();
+
+}
 
 }
 
