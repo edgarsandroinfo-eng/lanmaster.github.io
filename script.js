@@ -835,12 +835,11 @@ servicos.forEach(servico=>{
 
             <p>${servico.descricao}</p>
 
-            <button>
+           <button onclick="abrirPromptServico('${servico.prompt}')">
 
-                Abrir Prompt
+    Abrir Prompt
 
-            </button>
-
+</button>
         </div>
 
     `;
@@ -849,6 +848,28 @@ servicos.forEach(servico=>{
 
 }
 
+
+
+
+function abrirPromptServico(tituloPrompt){
+
+    const indice = banco["Prompts"].findIndex(prompt =>
+
+        prompt.titulo === tituloPrompt
+
+    );
+
+    if(indice === -1){
+
+        alert("Prompt não encontrado.");
+
+        return;
+
+    }
+
+    gerarPrompt(indice);
+
+}
 
 
 function desenharBlocoNotas(){
@@ -1490,6 +1511,7 @@ window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
 window.gerarPrompt = gerarPrompt;
 window.excluirServico = excluirServico;
+window.abrirPromptServico = abrirPromptServico;
 
 
 function novoPrompt(){
