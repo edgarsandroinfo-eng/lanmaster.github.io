@@ -855,44 +855,7 @@ lista.innerHTML = "";
 
 servicos.forEach(servico=>{
 
-    lista.innerHTML += `
-
-        <div class="card">
-
-            <h3>${servico.nome}</h3>
-
-            <p>${servico.descricao}</p>
-
-            <div class="acoes">
-
-                <button onclick="abrirPromptServico('${servico.prompt}')">
-
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-                    Abrir Prompt
-
-                </button>
-
-                <button onclick="concluirPropaganda(${servico.id})">
-
-                    <i class="fa-solid fa-circle-check"></i>
-
-                    Concluído
-
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-});
-
 }
-
-
-
 
 function abrirPromptServico(tituloPrompt){
 
@@ -926,6 +889,8 @@ async function concluirPropaganda(idServico){
     if(!propaganda) return;
 
     propaganda.concluido = true;
+	
+	alert("✅ Propaganda concluída!");
 
     await salvarBanco();
 
