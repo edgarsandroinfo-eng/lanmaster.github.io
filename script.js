@@ -863,11 +863,26 @@ servicos.forEach(servico=>{
 
             <p>${servico.descricao}</p>
 
-           <button onclick="abrirPromptServico('${servico.prompt}')">
+            <div class="acoes">
 
-    Abrir Prompt
+                <button onclick="abrirPromptServico('${servico.prompt}')">
 
-</button>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                    Abrir Prompt
+
+                </button>
+
+                <button onclick="concluirPropaganda(${servico.id})">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Concluído
+
+                </button>
+
+            </div>
+
         </div>
 
     `;
@@ -896,6 +911,25 @@ function abrirPromptServico(tituloPrompt){
     }
 
     gerarPrompt(indice);
+
+}
+
+
+async function concluirPropaganda(idServico){
+
+    const propaganda = banco.Configuracoes.propagandasHoje.find(item =>
+
+        item.id === idServico
+
+    );
+
+    if(!propaganda) return;
+
+    propaganda.concluido = true;
+
+    await salvarBanco();
+
+    renderizar();
 
 }
 
@@ -1600,6 +1634,7 @@ window.editarPrompt = editarPrompt;
 window.gerarPrompt = gerarPrompt;
 window.excluirServico = excluirServico;
 window.abrirPromptServico = abrirPromptServico;
+window.concluirPropaganda = concluirPropaganda;
 
 
 function novoPrompt(){
