@@ -90,7 +90,7 @@ if (alterouBanco) {
 
     renderizar();
 	
-	console.log(obterServicosDoDia());
+
 
 }
 
@@ -1403,7 +1403,13 @@ async function excluirServico(indice){
 
 function obterServicosDoDia(){
 
-    const ativos = banco["Serviços"].filter(servico =>
+    if(banco["Serviços"].length === 0){
+
+        return [];
+
+    }
+
+    let ativos = banco["Serviços"].filter(servico=>
 
         servico.status === "Ativo" &&
 
@@ -1419,7 +1425,11 @@ function obterServicosDoDia(){
 
         });
 
-        return obterServicosDoDia();
+        ativos = banco["Serviços"].filter(servico=>
+
+            servico.status === "Ativo"
+
+        );
 
     }
 
@@ -1428,8 +1438,6 @@ function obterServicosDoDia(){
     return ativos.slice(0,2);
 
 }
-
-
 
 window.favoritar = favoritar;
 window.concluir = concluir;
