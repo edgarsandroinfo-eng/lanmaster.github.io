@@ -25,16 +25,6 @@ const CATEGORIAS = [
     "Concluídos"
 ];
 
-
-const CONFIGURACAO_PADRAO = {
-
-    dataPropaganda: "",
-
-    propagandasHoje: []
-
-};
-
-
 let categoriaAtual = "Pendências";
 
 let banco = {};
@@ -1648,8 +1638,6 @@ async function prepararNovoDia(){
 
 }
 
-}
-
 
 window.favoritar = favoritar;
 window.concluir = concluir;
@@ -1917,9 +1905,11 @@ btnSalvarServico.onclick = async function(){
 		
 		ultimaPropaganda: "",
 
-divulgadoNoCiclo: false,
+		divulgadoNoCiclo: false,
+		
+		metaHoje: false,
 
-totalDivulgacoes: 0,
+		totalDivulgacoes: 0,
 
         data: new Date().toLocaleString("pt-BR"),
 
