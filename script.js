@@ -193,7 +193,8 @@ function atualizarRelogio(){
 
 function renderizar(){
 
-    atualizarTitulo();
+    desenharPropagandasDoDia();
+	atualizarTitulo();
     atualizarResumo();
     atualizarBadges();
 
@@ -809,6 +810,32 @@ function desenharServicos(){
     });
 
 }
+
+
+
+function desenharPropagandasDoDia(){
+
+    const painel = document.getElementById("propagandasDia");
+
+    const lista = document.getElementById("listaPropagandas");
+
+    painel.style.display = "block";
+
+    lista.innerHTML = `
+    
+        <div class="card">
+
+            <h3>📢 Propagandas do Dia</h3>
+
+            <p>Teste da versão 2.0</p>
+
+        </div>
+
+    `;
+
+}
+
+
 
 function desenharBlocoNotas(){
 
