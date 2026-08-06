@@ -824,15 +824,12 @@ function desenharServicos(){
 }
 
 
-
-
-
-async function desenharPropagandasDoDia(){
+function desenharPropagandasDoDia(){
 
     const painel = document.getElementById("propagandasDia");
     const lista = document.getElementById("listaPropagandas");
 
-   await prepararNovoDia();
+    prepararNovoDia();
 
     painel.style.display = "block";
 
@@ -904,8 +901,6 @@ async function desenharPropagandasDoDia(){
     });
 
 }
-
-
 
 function abrirPromptServico(tituloPrompt){
 
