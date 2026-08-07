@@ -8,6 +8,19 @@ export function desenharInicio(banco){
 
     const propagandas = banco["Serviços"].filter(s => s.metaHoje);
 
+
+const totalServicos = banco["Serviços"]
+    .filter(s => s.status === "Ativo").length;
+
+const divulgados = banco["Serviços"]
+    .filter(s => s.status === "Ativo" && s.divulgadoNoCiclo).length;
+
+const larguraBarra =
+    totalServicos === 0
+        ? 0
+        : (divulgados / totalServicos) * 100;
+
+
     cards.innerHTML = `
 
         <div class="homeTopo">
@@ -21,6 +34,15 @@ export function desenharInicio(banco){
         <div class="homePropagandas">
 
             <h3>📢 PROPAGANDAS DE HOJE</h3>
+
+            <div class="progressoPropaganda">
+
+    <div
+        class="barraPropaganda"
+        style="width:${larguraBarra}%">
+    </div>
+
+</div>
 
             ${
                 propagandas.length === 0

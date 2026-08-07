@@ -1690,3 +1690,34 @@ HOME
 
 }
 
+.progressoPropaganda{
+
+    width:100%;
+
+    height:10px;
+
+    background:#E5E7EB;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    margin:15px 0 20px;
+
+}
+
+.barraPropaganda{
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #2563EB,
+        #3B82F6
+    );
+
+    width:0;
+
+    transition:width .4s ease;
+
+}
