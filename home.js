@@ -4,60 +4,75 @@ export function desenharInicio(banco){
     const bloco = document.getElementById("blocoNotas");
 
     bloco.style.display = "none";
-    cards.style.display = "block";
+    cards.style.display = "grid";
 
-    const hoje = new Date();
-
-    const data = hoje.toLocaleDateString("pt-BR",{
-        weekday:"long",
-        day:"2-digit",
-        month:"long",
-        year:"numeric"
-    });
-
-    const propagandasHoje = banco.Configuracoes.propagandasHoje || [];
-
-    const total = propagandasHoje.length;
-
-    const concluidas = propagandasHoje.filter(p => p.concluido).length;
-
-    const porcentagem = total > 0
-        ? Math.round((concluidas / total) * 100)
-        : 0;
+    const propagandas = banco["Serviços"].filter(s => s.metaHoje);
 
     cards.innerHTML = `
 
-        <div class="homeCabecalho">
+        <div class="homeTopo">
 
-            <h2>👋 Olá, Edgar!</h2>
+            <h2>👋 Bem-vindo, Edgar!</h2>
 
-            <p>Bem-vindo ao Sistema da Lan Master.</p>
-
-            <span>${data}</span>
+            <p>Sistema de Anotações da Lan Master</p>
 
         </div>
 
-        <div class="homeCard">
+        <div class="homePropagandas">
 
-            <h3>📢 PROPAGANDAS DO DIA</h3>
+            <h3>📢 PROPAGANDAS DE HOJE</h3>
 
-            <div class="barraProgresso">
+            ${
+                propagandas.length === 0
+                ?
+                `<div class="itemPropaganda vazio">
 
-                <div class="barraPreenchida" style="width:${porcentagem}%"></div>
+                    Todas as propagandas de hoje foram concluídas.
 
-            </div>
+                </div>`
+                :
+                propagandas.map(servico=>`
 
-            <p class="textoProgresso">
+                    <div class="itemPropaganda">
 
-                ${concluidas} de ${total} concluídas
+                        <div>
 
-            </p>
+                            <strong>${servico.nome}</strong>
 
-            <span class="abrirCard">
+                            <br>
 
-                Clique para abrir →
+                            <small>${servico.descricao}</small>
 
-            </span>
+                        </div>
+
+                        <button onclick="concluirPropaganda(${servico.id})">
+
+                            Concluir
+
+                        </button>
+
+                    </div>
+
+                `).join("")
+            }
+
+        </div>
+
+        <div class="card homeMini"
+     onclick="abrirHomeCategoria('Pendências')">
+
+            <h3>📋 Pendências</h3>
+
+            <span>${banco["Pendências"].length}</span>
+
+        </div>
+
+        <div class="card homeMini"
+     onclick="abrirHomeCategoria('Serviços')">
+
+            <h3>🛠 Serviços</h3>
+
+            <span>${banco["Serviços"].length}</span>
 
         </div>
 

@@ -29,9 +29,10 @@ const CATEGORIAS = [
     "Concluídos"
 ];
 
-let categoriaAtual = "Pendências";
+let categoriaAtual = "Início";
 
 let banco = {};
+
 
 /*=====================================================
   INICIALIZAÇÃO
@@ -71,8 +72,6 @@ CATEGORIAS.forEach(cat => {
 
 });
 
-
-
 if(!banco.Configuracoes){
 
     banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
@@ -101,6 +100,17 @@ if (alterouBanco) {
     setInterval(atualizarRelogio,1000);
 
     configurarMenu();
+
+    const logo = document.getElementById("logoHome");
+
+
+logo.addEventListener("click", () => {
+
+    categoriaAtual = "Início";
+
+    renderizar();
+
+});
 
     renderizar();
 	
@@ -165,6 +175,21 @@ function configurarMenu(){
     });
 
 }
+
+const logo = document.getElementById("logoHome");
+
+logo.onclick = function(){
+
+    document
+        .querySelectorAll(".sidebar li")
+        .forEach(li => li.classList.remove("ativo"));
+
+    categoriaAtual = "Início";
+
+    renderizar();
+
+};
+
 /*=====================================================
   RELÓGIO
 =====================================================*/
@@ -215,12 +240,6 @@ async function renderizar(){
 
     atualizarBadges();
 
-    if(categoriaAtual !== "Início"){
-
-        await desenharPropagandasDoDia();
-
-    }
-
     mostrarTela();
 
 }
@@ -236,11 +255,17 @@ function mostrarTela(){
 
     switch(categoriaAtual){
 
-        case "Início":
+       case "Início":
 
-            desenharInicio(banco);
+    cards.style.display = "grid";
 
-            break;
+    bloco.style.display = "none";
+
+    app.classList.remove("modo-bloco");
+
+    desenharInicio(banco);
+
+    break;
 
         case "Bloco de Notas":
 
@@ -386,7 +411,29 @@ if (categoriaAtual === "Bloco de Notas") {
 
     if (painel) painel.style.display = "none";
 
-}else{
+}else if(categoriaAtual === "Início"){
+
+    titulo.innerHTML = "";
+
+if(subtitulo){
+
+    subtitulo.innerHTML = "";
+
+}
+
+
+    btnNova.style.display = "none";
+
+    if (btnNova2) btnNova2.style.display = "none";
+
+    if (pesquisa) pesquisa.style.display = "flex";
+
+    if (subtitulo) subtitulo.style.display = "";
+
+    if (painel) painel.style.display = "";
+
+}else   
+    {
 
     btnNova.style.display = "";
 
@@ -912,37 +959,27 @@ async function desenharPropagandasDoDia(){
 
     servicosHoje.forEach(servico=>{
 
-        lista.innerHTML += `
+       lista.innerHTML += `
 
-            <div class="card">
+    <div class="itemPropaganda">
 
-                <h3>${servico.nome}</h3>
+        <div class="dadosPropaganda">
 
-                <p>${servico.descricao}</p>
+            <strong>${servico.nome}</strong>
 
-                <div class="acoes">
+        </div>
 
-                    <button onclick="abrirPromptServico('${servico.prompt}')">
+        <button
+            class="btnConcluirPropaganda"
+            onclick="concluirPropaganda(${servico.id})">
 
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Concluir
 
-                        Abrir Prompt
+        </button>
 
-                    </button>
+    </div>
 
-                    <button onclick="concluirPropaganda(${servico.id})">
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                        Concluído
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        `;
+`;
 
     });
 
@@ -1780,6 +1817,30 @@ if(banco.Configuracoes.dataPropaganda === hoje){
     await salvarBanco();
 
 }
+
+function abrirHomeCategoria(categoria){
+
+    categoriaAtual = categoria;
+
+    document
+        .querySelectorAll(".sidebar li")
+        .forEach(li=>li.classList.remove("ativo"));
+
+    const menu = document.querySelector(
+        `.sidebar li[data-categoria="${categoria}"]`
+    );
+
+    if(menu){
+
+        menu.classList.add("ativo");
+
+    }
+
+    renderizar();
+
+}
+
+window.abrirHomeCategoria = abrirHomeCategoria;
 
 
 window.favoritar = favoritar;
