@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e3a5f">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lan Master Anotações</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- MENU -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img src="logo.png">
+
+        </div>
+
+        <nav>
+
+            <ul>
+
+
+<li class="ativo" data-categoria="Início">
+    <i class="fa-solid fa-house"></i>
+    <span class="textoMenu">Início</span>
+</li>
+
+
+  <li data-categoria="Pendências">
+    <i class="fa-solid fa-list-check"></i>
+    <span class="textoMenu">Pendências</span>
+    <span class="badgeMenu" id="badgePendencias">0</span>
+</li>
+
+<li data-categoria="Bloco de Notas">
+    <i class="fa-regular fa-note-sticky"></i>
+    <span class="textoMenu">Bloco de Notas</span>
+    <span class="badgeMenu" id="badgeNotas">0</span>
+</li>
+
+<li data-categoria="Clientes">
+    <i class="fa-regular fa-address-book"></i>
+    <span class="textoMenu">Clientes</span>
+    <span class="badgeMenu" id="badgeClientes">0</span>
+</li>
+
+<li data-categoria="VBA">
+    <i class="fa-solid fa-code"></i>
+    <span class="textoMenu">Programação</span>
+    <span class="badgeMenu" id="badgeProgramacao">0</span>
+</li>
+
+<li data-categoria="Investimentos">
+    <i class="fa-solid fa-chart-line"></i>
+    <span class="textoMenu">Investimentos</span>
+    <span class="badgeMenu" id="badgeInvestimentos">0</span>
+</li>
+
+<li data-categoria="Marketing">
+    <i class="fa-solid fa-bullhorn"></i>
+    <span class="textoMenu">Marketing</span>
+    <span class="badgeMenu" id="badgeMarketing">0</span>
+</li>
+
+<li data-categoria="Prompts">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    <span class="textoMenu">Prompts</span>
+    <span class="badgeMenu" id="badgePrompts">0</span>
+</li>
+
+<li data-categoria="Serviços">
+    <i class="fa-solid fa-briefcase"></i>
+    <span class="textoMenu">Serviços</span>
+    <span class="badgeMenu" id="badgeServicos">0</span>
+</li>
+
+<li data-categoria="Compras">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span class="textoMenu">Compras</span>
+    <span class="badgeMenu" id="badgeCompras">0</span>
+</li>
+
+<li data-categoria="Favoritos">
+    <i class="fa-regular fa-star"></i>
+    <span class="textoMenu">Favoritos</span>
+    <span class="badgeMenu" id="badgeFavoritos">0</span>
+</li>
+
+<li data-categoria="Concluídos">
+    <i class="fa-regular fa-circle-check"></i>
+    <span class="textoMenu">Concluídos</span>
+    <span class="badgeMenu" id="badgeConcluidos">0</span>
+</li>
+          </ul>
+
+        </nav>
+
+    </aside>
+
+    <!-- CENTRO -->
+
+    <main class="conteudo">
+
+        <header class="topo">
+
+<button id="btnMenu" class="btnMenu">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+            <div class="pesquisa">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+id="pesquisa"
+type="text"
+placeholder="Pesquisar anotações...">
+
+            </div>
+
+            <div id="relogio">
+
+                Segunda-feira,
+                24/07/2026
+
+            </div>
+
+        </header>
+
+        <section class="titulo">
+
+            <div>
+
+                <h1>
+
+                    <i class="fa-solid fa-list-check"></i>
+
+                    Pendências
+
+                </h1>
+
+                <span>
+
+                    Suas tarefas e lembretes do dia.
+
+                </span>
+
+            </div>
+
+            <button id="btnNova" class="novo">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Nova Anotação
+
+            </button>
+
+        </section>
+		
+		
+		<section id="propagandasDia" style="display:none;">
+
+    <h2>📢 Propagandas do Dia</h2>
+
+    <div id="listaPropagandas"></div>
+
+</section>
+		
+		
+		
+
+        <section id="cards">
+
+            <!-- Os cartões serão criados pelo JavaScript -->
+
+        </section>
+
+<section id="blocoNotas" style="display:none;"></section>
+
+    </main>
+
+    <!-- LADO DIREITO -->
+
+    <aside class="painel">
+
+        <div class="box">
+
+            <h2>
+
+                Resumo
+
+            </h2>
+
+            <div class="itemResumo">
+
+                <span>Pendências</span>
+
+                <strong id="qtPendencias">0</strong>
+
+            </div>
+
+            <div class="itemResumo">
+
+                <span>Bloco de Notas</span>
+
+                <strong id="qtNotas">0</strong>
+
+            </div>
+
+            <div class="itemResumo">
+
+                <span>Favoritos</span>
+
+                <strong id="qtFavoritos">0</strong>
+
+            </div>
+
+            <div class="itemResumo">
+
+                <span>Concluídos</span>
+
+                <strong id="qtConcluidos">0</strong>
+
+            </div>
+
+        </div>
+
+        <div class="box">
+
+            <h2>
+
+                Ações rápidas
+
+            </h2>
+
+          <button id="btnNova2" class="acao">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Nova Anotação
+
+            </button>
+
+           <button id="btnFavoritos" class="acao">
+
+                <i class="fa-regular fa-star"></i>
+
+                Ver Favoritos
+
+            </button>
+
+        </div>
+
+        <div class="box">
+
+            <h2>
+
+                Dica
+
+            </h2>
+
+            <p>
+
+                Clique na estrela para favoritar uma anotação e encontrá-la rapidamente.
+
+            </p>
+
+        </div>
+
+    </aside>
+
+</div>
+
+<!-- MODAL NOVA ANOTAÇÃO -->
+<div id="modalNova" class="modal">
+
+    <div class="janela">
+
+        <h2>Nova Anotação</h2>
+
+        <label>Título</label>
+        <input type="text" id="txtTitulo">
+
+        <label>Descrição</label>
+        <textarea id="txtDescricao"></textarea>
+
+       
+<h3 class="tituloOpcoes">
+    <i class="fa-solid fa-sliders"></i>
+    Opções
+</h3>
+
+<div class="painelOpcoes">
+
+    <!-- FAVORITAR -->
+    <div class="blocoOpcao">
+
+        
+
+<h4>
+    <i class="fa-solid fa-star iconeFavorito"></i>
+    Favoritar
+</h4>
+
+
+        <p>Marque para adicionar aos favoritos</p>
+
+        <label class="switch">
+
+            <input type="checkbox" id="chkFavorito">
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+    <!-- PRIORIDADE -->
+    <div class="blocoOpcao">
+
+      
+
+<h4>
+    <i class="fa-solid fa-flag iconePrioridade"></i>
+    Prioridade
+</h4>
+
+
+        <p>Defina o nível da prioridade</p>
+
+        <div class="botoesPrioridade">
+
+            <button class="prioridade alta">Alta</button>
+
+            <button class="prioridade media">Média</button>
+
+            <button class="prioridade baixa">Baixa</button>
+
+        </div>
+
+    </div>
+
+    <!-- DATA -->
+    <div class="blocoOpcao">
+
+      
+
+
+<h4>
+    <i class="fa-regular fa-calendar-days iconeData"></i>
+    Vencimento
+</h4>
+
+        <p>Defina uma data de vencimento</p>
+
+        <label class="switch">
+
+            <input type="checkbox" id="chkData">
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+</div>
+
+
+        <div id="areaData" style="display:none">
+
+            <label>Vencimento</label>
+
+            <input type="date" id="txtData">
+
+        </div>
+
+        <div class="rodapeModal">
+
+            <button id="btnCancelar">Cancelar</button>
+
+            <button id="btnSalvarModal">Salvar</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL PROMPTS -->
+<div id="modalPrompt" class="modal">
+
+    <div class="janelaPrompt">
+
+        <div class="cabecalhoServico">
+
+            <h2>Novo Prompt</h2>
+
+        </div>
+
+       <div class="corpoServico">
+
+            <label>Título</label>
+
+            <input
+                type="text"
+                id="txtTituloPrompt"
+               class="campoServico"
+
+            <label>Prompt</label>
+
+            <textarea
+                id="txtPrompt"
+                class="textoServico"></textarea>
+
+        </div>
+
+        <div class="rodapePrompt">
+
+            <button
+                id="btnCancelarPrompt"
+                class="btnSecundario">
+                Cancelar
+            </button>
+
+            <button
+                id="btnSalvarPrompt"
+                class="btnPrincipal">
+                Salvar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+MODAL SERVIÇOS
+========================================= -->
+
+<div id="modalServico" class="modal">
+
+    <div class="janelaServico">
+
+        <div class="cabecalhoPrompt">
+
+            <h2>
+                <i class="fa-solid fa-briefcase"></i>
+                Novo Serviço
+            </h2>
+
+        </div>
+
+        <div class="corpoPrompt">
+
+            <label>Nome do Serviço</label>
+
+            <input
+                type="text"
+                id="txtNomeServico"
+                class="campoPrompt">
+
+            <label>Descrição</label>
+
+            <textarea
+                id="txtDescricaoServico"
+                class="textoPrompt"></textarea>
+
+            <label>Prompt Associado</label>
+
+            <select
+                id="cmbPromptServico"
+                class="selectServico"
+
+                <option value="">Selecione um Prompt...</option>
+
+            </select>
+
+            <label>Status</label>
+
+            <div class="statusServico">
+
+                <label>
+                    <input
+                        type="radio"
+                        name="statusServico"
+                        value="Ativo"
+                        checked>
+
+                    🟢 Ativo
+                </label>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="statusServico"
+                        value="Inativo">
+
+                    ⚪ Inativo
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="rodapeServico">
+
+            <button
+                id="btnCancelarServico"
+                class="btnSecundario">
+
+                Cancelar
+
+            </button>
+
+            <button
+                id="btnSalvarServico"
+                class="btnPrincipal">
+
+                Salvar
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<!-- MODAL CONFIRMAÇÃO -->
+
+<div id="modalConfirmar" class="modal">
+
+    <div class="janelaConfirmar">
+
+       <div class="iconeConfirmar">
+
+    <i class="fa-solid fa-trash-can"></i>
+
+</div>
+
+        <h2>Confirmar Exclusão</h2>
+
+        <p id="textoConfirmacao">
+
+            Deseja realmente excluir este item?
+
+        </p>
+
+        <span>
+
+            Esta ação poderá ser desfeita futuramente pela Lixeira.
+
+        </span>
+
+        <div class="botoesConfirmacao">
+
+            <button
+                id="btnNao"
+                class="btnSecundario">
+
+                NÃO
+
+            </button>
+
+            <button
+                id="btnSim"
+                class="btnPrincipal">
+
+                SIM
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+MODAL GERAR PROMPT
+========================================= -->
+
+<div id="modalGerarPrompt" class="modal">
+
+    <div class="janelaPrompt">
+
+        <div class="cabecalhoPrompt">
+
+            <h2>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                Gerar Prompt
+            </h2>
+
+        </div>
+
+        <div class="corpoPrompt">
+
+            <label>Título</label>
+
+            <input
+                id="txtTituloGerado"
+                class="campoPrompt"
+                readonly>
+
+            <label>Prompt</label>
+
+            <textarea
+                id="txtPromptGerado"
+                class="textoPrompt"
+                readonly></textarea>
+
+        </div>
+
+        <div class="rodapePrompt">
+
+            <button
+                id="btnFecharGerado"
+                class="btnSecundario">
+
+                Fechar
+
+            </button>
+
+            <button
+                id="btnCopiarPrompt"
+                class="btnPrincipal">
+
+                <i class="fa-solid fa-copy"></i>
+
+                Copiar Prompt
+
+            </button>
+
+<button
+    id="btnChatGPT"
+    class="btnPrincipal">
+
+    <i class="fa-solid fa-robot"></i>
+
+    Abrir ChatGPT
+
+</button>
+
+<button
+    id="btnGemini"
+    class="btnPrincipal">
+
+    <i class="fa-solid fa-gem"></i>
+
+    Abrir Gemini
+
+</button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module" src="script.js"></script>
+
+</body>
+
+</html>
