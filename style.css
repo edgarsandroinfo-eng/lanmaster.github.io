@@ -1762,3 +1762,44 @@ HOME
     text-align:center;
 }
 
+
+
+
+
+
+@media(max-width:900px){
+
+    .homePropagandas{
+        display:block !important;
+        width:100% !important;
+        grid-column:1 / -1 !important;
+
+        background:#1F2937 !important;
+        border-radius:20px !important;
+        padding:24px !important;
+        min-height:auto !important;
+        box-sizing:border-box !important;
+    }
+
+    .progressoPropaganda{
+        display:block !important;
+        width:100% !important;
+        height:10px !important;
+
+        background:#E5E7EB !important;
+        border-radius:30px !important;
+        overflow:hidden !important;
+
+        margin:15px 0 20px !important;
+    }
+
+    .barraPropaganda{
+        display:block !important;
+        height:100% !important;
+        min-width:0 !important;
+
+        background:linear-gradient(90deg,#2563EB,#3B82F6) !important;
+        transition:width .4s ease !important;
+    }
+
+}
