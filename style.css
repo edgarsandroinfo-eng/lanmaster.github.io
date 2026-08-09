@@ -1733,4 +1733,14 @@ HOME
 
 }
 
+.homeCabecalho{
+    width:100%;
+    text-align:center;
+}
+
+.homeCabecalho h2{
+    width:100%;
+    color:#FFFFFF;
+    text-align:center;
+}
 
