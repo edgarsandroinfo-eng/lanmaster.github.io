@@ -1123,10 +1123,12 @@ document
 
 async function salvarBlocoNotas(){
 
-    const texto =
-        document
-        .getElementById("txtBlocoNotas")
-        .value;
+    const campo = document.getElementById("txtBlocoNotas");
+
+    const posicaoInicio = campo.selectionStart;
+    const posicaoFim = campo.selectionEnd;
+
+    const texto = campo.value;
 
     banco["Bloco de Notas"] = [
 
@@ -1139,6 +1141,11 @@ async function salvarBlocoNotas(){
     ];
 
     await salvarBanco();
+
+    campo.focus();
+
+    campo.setSelectionRange(posicaoInicio, posicaoFim);
+
     mostrarMensagemSalva();
 
 }
