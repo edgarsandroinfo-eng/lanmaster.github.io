@@ -389,7 +389,7 @@ function atualizarTitulo(){
 
         "Clientes":"Cadastro de clientes.",
 
-        "PROGRAMAÇÃO":"Ideias de Programação.",
+        "VBA":"Ideias de Programação.",
 
         "Investimentos":"Controle de investimentos.",
 
@@ -406,11 +406,17 @@ function atualizarTitulo(){
         "Concluídos":"Itens concluídos."
 
     };
+	
+	const nomes={
+
+    "VBA":"Ideias de Programação."
+
+};
 
     titulo.innerHTML=`
-        <i class="fa-solid ${icones[categoriaAtual]}"></i>
-        ${categoriaAtual}
-    `;
+    <i class="fa-solid ${icones[categoriaAtual]}"></i>
+    ${nomes[categoriaAtual] || categoriaAtual}
+`;
 
     if(subtitulo){
 
