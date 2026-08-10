@@ -32,6 +32,7 @@ const CATEGORIAS = [
 let categoriaAtual = "Início";
 
 let banco = {};
+let salvandoBlocoNotas = false;
 
 
 /*=====================================================
@@ -89,11 +90,18 @@ if (alterouBanco) {
 
     observarFirebase((novoBanco)=>{
 
-        banco = novoBanco;
+    banco = novoBanco;
 
-        renderizar();
+    if(salvandoBlocoNotas){
 
-    });
+        salvandoBlocoNotas = false;
+        return;
+
+    }
+
+    renderizar();
+
+});
 
     atualizarRelogio();
 
@@ -1125,9 +1133,6 @@ async function salvarBlocoNotas(){
 
     const campo = document.getElementById("txtBlocoNotas");
 
-    const posicaoInicio = campo.selectionStart;
-    const posicaoFim = campo.selectionEnd;
-
     const texto = campo.value;
 
     banco["Bloco de Notas"] = [
@@ -1140,11 +1145,9 @@ async function salvarBlocoNotas(){
 
     ];
 
+    salvandoBlocoNotas = true;
+
     await salvarBanco();
-
-    campo.focus();
-
-    campo.setSelectionRange(posicaoInicio, posicaoFim);
 
     mostrarMensagemSalva();
 
