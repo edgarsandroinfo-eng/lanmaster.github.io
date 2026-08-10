@@ -107,6 +107,20 @@ if (alterouBanco) {
 logo.addEventListener("click", () => {
 
     categoriaAtual = "Início";
+	
+	
+	categoriaAtual = "Início";
+
+if(window.innerWidth <= 900){
+
+    document
+        .querySelector(".sidebar")
+        .classList.remove("aberto");
+
+}
+
+renderizar();
+	
 
     renderizar();
 
