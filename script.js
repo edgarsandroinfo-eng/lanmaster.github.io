@@ -233,6 +233,8 @@ function atualizarRelogio(){
 
 
 async function renderizar(){
+	
+	await prepararNovoDia();
 
     atualizarTitulo();
 
