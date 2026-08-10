@@ -735,15 +735,16 @@ lista.sort((a, b) => {
 
         <div class="card">
 
-            <h3>${c.titulo}</h3>
+         <h3>${c.titulo}</h3>
 
-            <p>${c.descricao}</p>
+${c.descricao && c.descricao.trim() !== ""
+    ? `<p>${c.descricao}</p>`
+    : ""
+}
 
-            <div class="data">
-
-                ${c.data}
-
-            </div>
+<div class="data">
+    ${c.data}
+</div>
 
             <div class="acoes">
 
