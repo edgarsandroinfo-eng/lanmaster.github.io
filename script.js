@@ -1869,6 +1869,7 @@ window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
 window.gerarPrompt = gerarPrompt;
 window.excluirServico = excluirServico;
+window.editarServico = editarServico;
 window.abrirPromptServico = abrirPromptServico;
 window.concluirPropaganda = concluirPropaganda;
 
