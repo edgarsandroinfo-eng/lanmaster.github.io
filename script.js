@@ -2110,6 +2110,47 @@ btnCancelarPrompt.onclick = function(){
 
 }
 
+btnSalvarPrompt.onclick = async function(){
+
+    if(txtTituloPrompt.value.trim() == ""){
+
+        alert("Informe um título.");
+        txtTituloPrompt.focus();
+        return;
+
+    }
+
+    if(indiceEdicaoPrompt == -1){
+
+        const agora = new Date();
+
+        banco["Prompts"].push({
+
+            titulo: txtTituloPrompt.value.trim(),
+            prompt: txtPrompt.value.trim(),
+            data: agora.toLocaleString("pt-BR"),
+            timestamp: Date.now()
+
+        });
+
+    }else{
+
+        banco["Prompts"][indiceEdicaoPrompt].titulo =
+            txtTituloPrompt.value.trim();
+
+        banco["Prompts"][indiceEdicaoPrompt].prompt =
+            txtPrompt.value.trim();
+
+    }
+
+    await salvarBanco();
+
+    modalPrompt.style.display = "none";
+
+    renderizar();
+
+}
+
 
 btnCancelarServico.onclick = function(){
 
