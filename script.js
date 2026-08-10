@@ -1101,6 +1101,22 @@ function desenharBlocoNotas(){
     document
         .getElementById("btnOkBloco")
         .onclick = salvarBlocoNotas;
+		
+		let timerAutoSave;
+
+document
+    .getElementById("txtBlocoNotas")
+    .addEventListener("input", function(){
+
+        clearTimeout(timerAutoSave);
+
+        timerAutoSave = setTimeout(async function(){
+
+            await salvarBlocoNotas();
+
+        }, 1000);
+
+    });
 
 }
 
