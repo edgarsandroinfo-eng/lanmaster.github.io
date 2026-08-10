@@ -389,7 +389,7 @@ function atualizarTitulo(){
 
         "Clientes":"Cadastro de clientes.",
 
-        "VBA":"Ideias de Programação.",
+        "PROGRAMAÇÃO":"Ideias de Programação.",
 
         "Investimentos":"Controle de investimentos.",
 
