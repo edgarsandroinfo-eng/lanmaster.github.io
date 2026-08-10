@@ -469,6 +469,8 @@ body{
 ========================================================== */
 
 .btnMenu{
+	
+	display:none;
 
     background:transparent;
 
