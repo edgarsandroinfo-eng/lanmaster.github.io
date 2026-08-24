@@ -2495,15 +2495,7 @@ function desenharContadorImpressoes(){
 
     <div class="contadorPainel">
 
-        <h2 class="tituloContador">
-            🖨️ Contador de Impressões
-        </h2>
-
-        <p class="subtituloContador">
-            Controle diário das impressões realizadas
-        </p>
-
-
+       
         <div class="cardContador">
 
             <h3>💲 Preços</h3>
@@ -2657,6 +2649,17 @@ function desenharContadorImpressoes(){
 
             </div>
 
+            <hr>
+
+            <button
+                class="btnFechamentoMes"
+                onclick="resetarContador()">
+
+                📅 Fechamento do Mês
+
+            </button>
+
+
         </div>
 
     </div>
@@ -2782,3 +2785,44 @@ async function alterarContador(tipo, valor){
     desenharContadorImpressoes();
 
 }
+
+async function resetarContador(){
+
+    const confirmar = confirm(
+
+`Deseja realmente realizar o fechamento do mês?
+
+Todos os contadores serão zerados.
+
+Esta ação não poderá ser desfeita.`
+
+    );
+
+    if(!confirmar){
+        return;
+    }
+
+    // Zera contadores do dia
+    banco.ContadorImpressoes.pb = 0;
+    banco.ContadorImpressoes.colorida = 0;
+
+    banco.ContadorImpressoes.total = 0;
+    banco.ContadorImpressoes.valor = 0;
+
+    // Zera estatísticas gerais
+    banco.ContadorImpressoes.totalPB = 0;
+    banco.ContadorImpressoes.totalColorida = 0;
+    banco.ContadorImpressoes.totalImpressoes = 0;
+    banco.ContadorImpressoes.valorTotal = 0;
+
+    // Atualiza a data
+    banco.ContadorImpressoes.data =
+        new Date().toLocaleDateString("pt-BR");
+
+    await salvarBanco();
+
+    desenharContadorImpressoes();
+
+}
+
+window.resetarContador = resetarContador;
