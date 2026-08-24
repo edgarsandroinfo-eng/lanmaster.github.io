@@ -31,21 +31,26 @@ getRedirectResult(auth)
 
 function usarRedirect(){
 
-    const mobile =
-        /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    const pwa =
-        window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true;
-
-    return mobile || pwa;
+    return window.matchMedia("(display-mode: standalone)").matches ||
+           window.navigator.standalone === true;
 
 }
 
 
 export async function autenticar(){
 
-    return new Promise(async(resolve,reject)=>{
+    // Primeiro verifica se voltou de um Redirect
+    try{
+
+        await getRedirectResult(auth);
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+
+    return new Promise((resolve,reject)=>{
 
         onAuthStateChanged(auth, async(usuario)=>{
 
@@ -61,29 +66,20 @@ export async function autenticar(){
 
             try{
 
-               if(usarRedirect()){
+                if(usarRedirect()){
 
-    await signInWithRedirect(auth,provider);
+                    await signInWithRedirect(auth,provider);
 
-    return;
+                }else{
 
-}else{
+                    const resultado =
+                        await signInWithPopup(auth,provider);
 
-    const resultado =
-        await signInWithPopup(auth,provider);
+                    resolve(resultado.user);
 
-    console.log(
-        "Login realizado:",
-        resultado.user.email
-    );
-
-    resolve(resultado.user);
-
-}
+                }
 
             }catch(erro){
-
-                console.error(erro);
 
                 reject(erro);
 
