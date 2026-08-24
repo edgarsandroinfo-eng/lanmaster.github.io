@@ -4,7 +4,7 @@
    BLOCO 1 - NÚCLEO DO SISTEMA
 ===================================================== */
 
-import { autenticar } from "./authentication.js";
+/*import { autenticar } from "./authentication.js";*/
 import {
     carregarFirebase,
     salvarFirebase,
@@ -47,7 +47,7 @@ iniciarSistema()
 async function iniciarSistema(){
 
  // Aguarda o login antes de acessar o Firestore
-    await autenticar();
+    
 
     let dados = await carregarFirebase();
 
