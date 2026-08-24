@@ -2062,6 +2062,7 @@ window.editarCartao = editarCartao;
 window.restaurar = restaurar;
 window.excluir = excluir;
 window.alterarContador = alterarContador;
+window.salvarPrecos = salvarPrecos;
 window.alterarManual = alterarManual;
 
 window.excluirPrompt = excluirPrompt;
