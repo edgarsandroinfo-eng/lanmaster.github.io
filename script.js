@@ -4,7 +4,7 @@
    BLOCO 1 - NÚCLEO DO SISTEMA
 ===================================================== */
 
-
+import { autenticar } from "./authentication.js";
 import {
     carregarFirebase,
     salvarFirebase,
@@ -18,6 +18,7 @@ import {
 const CATEGORIAS = [
     "Pendências",
     "Bloco de Notas",
+    "Contador de Impressões",
     "Clientes",
     "VBA",
     "Investimentos",
@@ -44,6 +45,9 @@ iniciarSistema()
 
 
 async function iniciarSistema(){
+
+ // Aguarda o login antes de acessar o Firestore
+    await autenticar();
 
     let dados = await carregarFirebase();
 
@@ -78,6 +82,88 @@ if(!banco.Configuracoes){
     banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
 
     alterouBanco = true;
+
+}
+if(!banco.ContadorImpressoes){
+
+    banco.ContadorImpressoes = {
+
+        precoPB: 0.25,
+        precoColorida: 2.50,
+
+        pb: 0,
+        colorida: 0,
+
+        total: 0,
+        valor: 0,
+
+        totalPB: 0,
+        totalColorida: 0,
+        totalImpressoes: 0,
+        valorTotal: 0,
+
+        data: new Date().toLocaleDateString("pt-BR")
+
+    };
+
+    alterouBanco = true;
+}
+
+if(!banco.Configuracoes.contadorImpressoes){
+
+    banco.Configuracoes.contadorImpressoes = {
+
+        precoPB:0.25,
+        precoColorida:2.50,
+
+        hoje:{
+            pb:0,
+            colorida:0
+        },
+
+        mes:{
+            pb:0,
+            colorida:0
+        },
+
+        data:new Date().toLocaleDateString("pt-BR"),
+
+        mesAtual:new Date().getMonth()
+
+    };
+
+    alterouBanco = true;
+
+}
+
+
+if(banco.ContadorImpressoes){
+
+    if(banco.ContadorImpressoes.totalPB == null){
+        banco.ContadorImpressoes.totalPB = 0;
+        alterouBanco = true;
+    }
+
+    if(banco.ContadorImpressoes.totalColorida == null){
+        banco.ContadorImpressoes.totalColorida = 0;
+        alterouBanco = true;
+    }
+
+    if(banco.ContadorImpressoes.totalImpressoes == null){
+        banco.ContadorImpressoes.totalImpressoes = 0;
+        alterouBanco = true;
+    }
+
+    if(banco.ContadorImpressoes.valorTotal == null){
+        banco.ContadorImpressoes.valorTotal = 0;
+        alterouBanco = true;
+    }
+
+    if(!banco.ContadorImpressoes.data){
+        banco.ContadorImpressoes.data =
+            new Date().toLocaleDateString("pt-BR");
+        alterouBanco = true;
+    }
 
 }
 
@@ -155,6 +241,30 @@ function criarBanco(){
     });
 
     banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
+
+// Contador de Impressões
+banco.ContadorImpressoes = {
+
+    precoPB: 0.25,
+    precoColorida: 2.50,
+
+    // CONTADOR DO DIA
+    pb: 0,
+    colorida: 0,
+    total: 0,
+    valor: 0,
+
+    // ACUMULADO GERAL
+    totalPB: 0,
+    totalColorida: 0,
+    totalImpressoes: 0,
+    valorTotal: 0,
+
+    // Controle da data
+    data: new Date().toLocaleDateString("pt-BR"),
+
+   };
+
 
 }
 
@@ -255,6 +365,8 @@ function atualizarRelogio(){
 
 
 async function renderizar(){
+
+    await prepararNovoDiaImpressoes();
 	
 	await prepararNovoDia();
 
@@ -277,6 +389,12 @@ function mostrarTela(){
 
     const app = document.querySelector(".app");
 
+    const contador = document.getElementById("contadorImpressoes");
+
+    const btnNova = document.getElementById("btnNova");
+
+    const btnNova2 = document.getElementById("btnNova2");
+
     switch(categoriaAtual){
 
        case "Início":
@@ -285,7 +403,13 @@ function mostrarTela(){
 
     bloco.style.display = "none";
 
+    contador.style.display = "none";
+
     app.classList.remove("modo-bloco");
+
+    btnNova.style.display = "";
+    
+    btnNova2.style.display = "";
 
     desenharInicio(banco);
 
@@ -296,12 +420,30 @@ function mostrarTela(){
             cards.style.display = "none";
 
             bloco.style.display = "block";
-
+            
             app.classList.add("modo-bloco");
 
             desenharBlocoNotas();
 
             break;
+
+            case "Contador de Impressões":
+
+            cards.style.display = "none";
+
+            bloco.style.display = "none";
+
+            contador.style.display = "block";
+
+            app.classList.remove("modo-bloco");
+
+            btnNova.style.display = "none";
+            
+            btnNova2.style.display = "none";
+
+            desenharContadorImpressoes();
+
+    break;
 
         case "Prompts":
 
@@ -309,7 +451,13 @@ function mostrarTela(){
 
             bloco.style.display = "none";
 
+            contador.style.display = "none";
+
             app.classList.remove("modo-bloco");
+
+            btnNova.style.display = "";
+
+            btnNova2.style.display = "";
 
             desenharPrompts();
 
@@ -321,7 +469,13 @@ function mostrarTela(){
 
             bloco.style.display = "none";
 
+            contador.style.display = "none";
+
             app.classList.remove("modo-bloco");
+
+            btnNova.style.display = "";
+
+            btnNova2.style.display = "";
 
             desenharServicos();
 
@@ -333,7 +487,13 @@ function mostrarTela(){
 
             bloco.style.display = "none";
 
+            contador.style.display = "none";
+
             app.classList.remove("modo-bloco");
+
+            btnNova.style.display = "";
+
+            btnNova2.style.display = "";
 
             desenharCards();
 
@@ -344,7 +504,7 @@ function mostrarTela(){
 }
 
 /*=====================================================
-  TÍTULO
+  TTULO
 =====================================================*/
 
 function atualizarTitulo(){
@@ -360,6 +520,8 @@ function atualizarTitulo(){
         "Pendências":"fa-list-check",
 
         "Bloco de Notas":"fa-note-sticky",
+
+        "Contador de Impressões":"fa-print",
 
         "Clientes":"fa-address-book",
 
@@ -386,6 +548,8 @@ function atualizarTitulo(){
         "Pendências":"Suas tarefas e lembretes do dia.",
 
         "Bloco de Notas":"Anotações rápidas.",
+
+        "Contador de Impressões":"Controle diário das impressões realizadas.",
 
         "Clientes":"Cadastro de clientes.",
 
@@ -1897,6 +2061,8 @@ window.concluir = concluir;
 window.editarCartao = editarCartao;
 window.restaurar = restaurar;
 window.excluir = excluir;
+window.alterarContador = alterarContador;
+window.alterarManual = alterarManual;
 
 window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
@@ -1941,6 +2107,26 @@ document.addEventListener("keydown", async function(e){
 
 });
 
+
+document.addEventListener("keydown", async function(e){
+
+    if(e.key === "F10"){
+
+        e.preventDefault();
+
+        banco.ContadorImpressoes.data = "01/01/2000";
+
+        await salvarBanco();
+
+        await prepararNovoDiaImpressoes();
+
+        desenharContadorImpressoes();
+
+        alert("Virada do dia simulada!");
+
+    }
+
+});
 
 function novoPrompt(){
 
@@ -2264,5 +2450,334 @@ btnSalvarServico.onclick = async function(){
     modalServico.style.display = "none";
 
     renderizar();
+
+}
+
+async function prepararNovoDiaImpressoes(){
+
+    const hoje = new Date().toLocaleDateString("pt-BR");
+
+    // Ainda é o mesmo dia
+    if(banco.ContadorImpressoes.data === hoje){
+        return;
+    }
+
+    // Soma o dia aos acumulados gerais
+    banco.ContadorImpressoes.totalPB += banco.ContadorImpressoes.pb;
+
+    banco.ContadorImpressoes.totalColorida +=
+        banco.ContadorImpressoes.colorida;
+
+    banco.ContadorImpressoes.totalImpressoes +=
+        banco.ContadorImpressoes.total;
+
+    banco.ContadorImpressoes.valorTotal +=
+        banco.ContadorImpressoes.valor;
+
+    // Zera o contador diário
+    banco.ContadorImpressoes.pb = 0;
+    banco.ContadorImpressoes.colorida = 0;
+    banco.ContadorImpressoes.total = 0;
+    banco.ContadorImpressoes.valor = 0;
+
+    // Atualiza a data
+    banco.ContadorImpressoes.data = hoje;
+
+    await salvarBanco();
+
+}
+
+
+function desenharContadorImpressoes(){
+
+    document.getElementById("contadorImpressoes").innerHTML = `
+
+    <div class="contadorPainel">
+
+        <h2 class="tituloContador">
+            🖨️ Contador de Impressões
+        </h2>
+
+        <p class="subtituloContador">
+            Controle diário das impressões realizadas
+        </p>
+
+
+        <div class="cardContador">
+
+            <h3>💲 Preços</h3>
+
+            <div class="linhaCampo">
+
+                <label>Preto e Branco</label>
+
+                <input
+                    type="number"
+                    id="precoPB"
+                    step="0.01"
+                    value="${banco.ContadorImpressoes.precoPB}"
+                    onchange="salvarPrecos()">
+
+            </div>
+
+            <div class="linhaCampo">
+
+                <label>Colorida</label>
+
+                <input
+                    type="number"
+                    id="precoColorida"
+                    step="0.01"
+                    value="${banco.ContadorImpressoes.precoColorida}"
+                    onchange="salvarPrecos()">
+
+            </div>
+
+        </div>
+
+
+        <div class="cardContador">
+
+            <h3>🖨 Impressões</h3>
+
+            <div class="contadorLinhaNova">
+
+                <span>Preto e Branco</span>
+
+                <button onclick="alterarContador('pb',-1)">−</button>
+
+                <input
+                    id="qtdPB"
+                    type="number"
+                    value="${banco.ContadorImpressoes.pb}"
+                    onchange="alterarManual('pb')">
+
+                <button onclick="alterarContador('pb',1)">+</button>
+
+            </div>
+
+            <div class="contadorLinhaNova">
+
+                <span>Coloridas</span>
+
+                <button onclick="alterarContador('colorida',-1)">−</button>
+
+                <input
+                    id="qtdColorida"
+                    type="number"
+                    value="${banco.ContadorImpressoes.colorida}"
+                    onchange="alterarManual('colorida')">
+
+                <button onclick="alterarContador('colorida',1)">+</button>
+
+            </div>
+
+        </div>
+
+
+        <div class="cardContador">
+
+            <h3>📅 Hoje</h3>
+
+            <div class="linhaResumo">
+
+                <span>Impressões</span>
+
+                <strong id="totalImpressoes">
+                    ${banco.ContadorImpressoes.total}
+                </strong>
+
+            </div>
+
+            <div class="linhaResumo">
+
+                <span>Arrecadado</span>
+
+                <strong id="valorTotal">
+
+                    ${banco.ContadorImpressoes.valor.toLocaleString("pt-BR",{
+                        style:"currency",
+                        currency:"BRL"
+                    })}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="cardContador">
+
+            <h3>📊 Estatísticas Gerais</h3>
+
+            <div class="linhaResumo">
+
+                <span>Total PB</span>
+
+                <strong>
+                    ${banco.ContadorImpressoes.totalPB}
+                </strong>
+
+            </div>
+
+            <div class="linhaResumo">
+
+                <span>Total Coloridas</span>
+
+                <strong>
+                    ${banco.ContadorImpressoes.totalColorida}
+                </strong>
+
+            </div>
+
+            <div class="linhaResumo">
+
+                <span>Total Impressões</span>
+
+                <strong>
+                    ${banco.ContadorImpressoes.totalImpressoes}
+                </strong>
+
+            </div>
+
+            <div class="linhaResumo">
+
+                <span>Valor Arrecadado</span>
+
+                <strong>
+
+                    ${banco.ContadorImpressoes.valorTotal.toLocaleString("pt-BR",{
+                        style:"currency",
+                        currency:"BRL"
+                    })}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    `;
+}
+
+function atualizarResumoImpressoes(){
+
+    document.getElementById("qtdPB").value =
+        banco.ContadorImpressoes.pb;
+
+    document.getElementById("qtdColorida").value =
+        banco.ContadorImpressoes.colorida;
+
+    const total =
+        banco.ContadorImpressoes.pb +
+        banco.ContadorImpressoes.colorida;
+
+    const valor =
+        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
+        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+
+    document.getElementById("totalImpressoes").innerHTML = total;
+
+   document.getElementById("valorTotal").innerHTML =
+    valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+async function alterarManual(tipo){
+
+    // Atualiza os preços
+    banco.ContadorImpressoes.precoPB =
+        Number(document.getElementById("precoPB").value) || 0;
+
+    banco.ContadorImpressoes.precoColorida =
+        Number(document.getElementById("precoColorida").value) || 0;
+
+    // Atualiza a quantidade digitada
+    if(tipo === "pb"){
+
+        banco.ContadorImpressoes.pb =
+            Number(document.getElementById("qtdPB").value) || 0;
+
+    }else{
+
+        banco.ContadorImpressoes.colorida =
+            Number(document.getElementById("qtdColorida").value) || 0;
+
+    }
+
+    // Recalcula os totais
+    banco.ContadorImpressoes.total =
+        banco.ContadorImpressoes.pb +
+        banco.ContadorImpressoes.colorida;
+
+    banco.ContadorImpressoes.valor =
+        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
+        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+
+    await salvarBanco();
+
+    desenharContadorImpressoes();
+
+}
+
+
+async function salvarPrecos() {
+
+    banco.ContadorImpressoes.precoPB =
+        Number(document.getElementById("precoPB").value) || 0;
+
+    banco.ContadorImpressoes.precoColorida =
+        Number(document.getElementById("precoColorida").value) || 0;
+
+    await salvarBanco();
+
+}
+async function alterarContador(tipo, valor){
+
+    // Atualiza os preços digitados na tela
+    banco.ContadorImpressoes.precoPB =
+        Number(document.getElementById("precoPB").value) || 0;
+
+    banco.ContadorImpressoes.precoColorida =
+        Number(document.getElementById("precoColorida").value) || 0;
+
+    // Atualiza os contadores
+    if(tipo === "pb"){
+
+        banco.ContadorImpressoes.pb += valor;
+
+        if(banco.ContadorImpressoes.pb < 0){
+            banco.ContadorImpressoes.pb = 0;
+        }
+
+    }
+
+    if(tipo === "colorida"){
+
+        banco.ContadorImpressoes.colorida += valor;
+
+        if(banco.ContadorImpressoes.colorida < 0){
+            banco.ContadorImpressoes.colorida = 0;
+        }
+
+    }
+
+    // Recalcula os totais
+    banco.ContadorImpressoes.total =
+        banco.ContadorImpressoes.pb +
+        banco.ContadorImpressoes.colorida;
+
+    banco.ContadorImpressoes.valor =
+        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
+        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+
+    await salvarBanco();
+
+    desenharContadorImpressoes();
 
 }
