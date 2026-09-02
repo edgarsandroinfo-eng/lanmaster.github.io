@@ -44,18 +44,18 @@ iniciarSistema()
 
 
 
-async function iniciarSistema(){
+async function iniciarSistema() {
 
- // Aguarda o login antes de acessar o Firestore
-    
+    // Aguarda o login antes de acessar o Firestore
+
 
     let dados = await carregarFirebase();
 
-    if(dados){
+    if (dados) {
 
         banco = dados;
 
-    }else{
+    } else {
 
         criarBanco();
 
@@ -63,165 +63,143 @@ async function iniciarSistema(){
 
     }
 
-// Garante que todas as categorias existam
-let alterouBanco = false;
+    // Garante que todas as categorias existam
+    let alterouBanco = false;
 
-CATEGORIAS.forEach(cat => {
+    CATEGORIAS.forEach(cat => {
 
-    if (!banco[cat]) {
+        if (!banco[cat]) {
 
-        banco[cat] = [];
+            banco[cat] = [];
+            alterouBanco = true;
+
+        }
+
+    });
+
+    if (!banco.Configuracoes) {
+
+        banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
+
+        alterouBanco = true;
+
+    }
+    if (!banco.ContadorImpressoes) {
+
+        banco.ContadorImpressoes = {
+
+            // Preços
+            precoPB: 0.25,
+            precoColorida: 2.50,
+
+            // Última leitura registrada
+            ultimaLeituraPB: 0,
+            ultimaLeituraColorida: 0,
+
+            // Acumulado do mês
+            totalPBMes: 0,
+            totalColoridaMes: 0,
+
+            dataUltimaLeitura: "",
+
+            // Valores do mês
+            valorPBMes: 0,
+            valorColoridaMes: 0
+
+        };
+
         alterouBanco = true;
 
     }
 
-});
 
-if(!banco.Configuracoes){
+    if (banco.ContadorImpressoes) {
 
-    banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
+        const padrao = {
 
-    alterouBanco = true;
+            precoPB: 0.25,
+            precoColorida: 2.50,
 
-}
-if(!banco.ContadorImpressoes){
+            ultimaLeituraPB: 0,
+            ultimaLeituraColorida: 0,
 
-    banco.ContadorImpressoes = {
+            totalPBMes: 0,
+            totalColoridaMes: 0,
 
-        precoPB: 0.25,
-        precoColorida: 2.50,
+            valorPBMes: 0,
+            valorColoridaMes: 0,
 
-        pb: 0,
-        colorida: 0,
+            dataFechamento: ""
 
-        total: 0,
-        valor: 0,
+        };
+        for (const campo in padrao) {
 
-        totalPB: 0,
-        totalColorida: 0,
-        totalImpressoes: 0,
-        valorTotal: 0,
+            if (banco.ContadorImpressoes[campo] == null) {
 
-        data: new Date().toLocaleDateString("pt-BR")
+                banco.ContadorImpressoes[campo] = padrao[campo];
 
-    };
+                alterouBanco = true;
 
-    alterouBanco = true;
-}
+            }
 
-if(!banco.Configuracoes.contadorImpressoes){
-
-    banco.Configuracoes.contadorImpressoes = {
-
-        precoPB:0.25,
-        precoColorida:2.50,
-
-        hoje:{
-            pb:0,
-            colorida:0
-        },
-
-        mes:{
-            pb:0,
-            colorida:0
-        },
-
-        data:new Date().toLocaleDateString("pt-BR"),
-
-        mesAtual:new Date().getMonth()
-
-    };
-
-    alterouBanco = true;
-
-}
-
-
-if(banco.ContadorImpressoes){
-
-    if(banco.ContadorImpressoes.totalPB == null){
-        banco.ContadorImpressoes.totalPB = 0;
-        alterouBanco = true;
-    }
-
-    if(banco.ContadorImpressoes.totalColorida == null){
-        banco.ContadorImpressoes.totalColorida = 0;
-        alterouBanco = true;
-    }
-
-    if(banco.ContadorImpressoes.totalImpressoes == null){
-        banco.ContadorImpressoes.totalImpressoes = 0;
-        alterouBanco = true;
-    }
-
-    if(banco.ContadorImpressoes.valorTotal == null){
-        banco.ContadorImpressoes.valorTotal = 0;
-        alterouBanco = true;
-    }
-
-    if(!banco.ContadorImpressoes.data){
-        banco.ContadorImpressoes.data =
-            new Date().toLocaleDateString("pt-BR");
-        alterouBanco = true;
-    }
-
-}
-
-
-if (alterouBanco) {
-
-    await salvarBanco();
-
-}
-
-    observarFirebase((novoBanco)=>{
-
-    banco = novoBanco;
-
-    if(salvandoBlocoNotas){
-
-        salvandoBlocoNotas = false;
-        return;
+        }
 
     }
 
-    renderizar();
+    if (alterouBanco) {
 
-});
+        await salvarBanco();
+
+    }
+
+    observarFirebase((novoBanco) => {
+
+        banco = novoBanco;
+
+        if (salvandoBlocoNotas) {
+
+            salvandoBlocoNotas = false;
+            return;
+
+        }
+
+        renderizar();
+
+    });
 
     atualizarRelogio();
 
-    setInterval(atualizarRelogio,1000);
+    setInterval(atualizarRelogio, 1000);
 
     configurarMenu();
 
     const logo = document.getElementById("logoHome");
 
 
-logo.addEventListener("click", () => {
+    logo.addEventListener("click", () => {
 
-    categoriaAtual = "Início";
-	
-	
-	categoriaAtual = "Início";
+        categoriaAtual = "Início";
 
-if(window.innerWidth <= 900){
 
-    document
-        .querySelector(".sidebar")
-        .classList.remove("aberto");
+        categoriaAtual = "Início";
 
-}
+        if (window.innerWidth <= 900) {
 
-renderizar();
-	
+            document
+                .querySelector(".sidebar")
+                .classList.remove("aberto");
+
+        }
+
+        renderizar();
+
+
+        renderizar();
+
+    });
 
     renderizar();
 
-});
-
-    renderizar();
-	
 
 
 }
@@ -229,63 +207,61 @@ renderizar();
 /*=====================================================
   BANCO DE DADOS
 =====================================================*/
-
-function criarBanco(){
+function criarBanco() {
 
     banco = {};
 
-    CATEGORIAS.forEach(cat=>{
-
-        banco[cat]=[];
-
+    CATEGORIAS.forEach(cat => {
+        banco[cat] = [];
     });
 
     banco.Configuracoes = structuredClone(CONFIGURACAO_PADRAO);
 
-// Contador de Impressões
-banco.ContadorImpressoes = {
+    banco.ContadorImpressoes = {
 
-    precoPB: 0.25,
-    precoColorida: 2.50,
+        // Preços
+        precoPB: 0.25,
+        precoColorida: 2.50,
 
-    // CONTADOR DO DIA
-    pb: 0,
-    colorida: 0,
-    total: 0,
-    valor: 0,
+        // Última leitura registrada
+        ultimaLeituraPB: 0,
+        ultimaLeituraColorida: 0,
 
-    // ACUMULADO GERAL
-    totalPB: 0,
-    totalColorida: 0,
-    totalImpressoes: 0,
-    valorTotal: 0,
+        // Acumulado do mês
+        totalPBMes: 0,
+        totalColoridaMes: 0,
 
-    // Controle da data
-    data: new Date().toLocaleDateString("pt-BR"),
+        // Valores do mês
+        valorPBMes: 0,
+        valorColoridaMes: 0,
 
-   };
+        // Controle
+        dataFechamento: ""
 
+    };
 
-}
+} // ← criarBanco termina aqui
 
-async function salvarBanco(){
+async function salvarBanco() {
 
     await salvarFirebase(banco);
 
 }
+
+
 /*=====================================================
   MENU
 =====================================================*/
 
-function configurarMenu(){
+function configurarMenu() {
 
     const menus = document.querySelectorAll(".sidebar li");
 
-    menus.forEach(item=>{
+    menus.forEach(item => {
 
-        item.addEventListener("click",function(){
+        item.addEventListener("click", function () {
 
-            menus.forEach(m=>m.classList.remove("ativo"));
+            menus.forEach(m => m.classList.remove("ativo"));
 
             this.classList.add("ativo");
 
@@ -294,11 +270,11 @@ function configurarMenu(){
             renderizar();
 
             // Fecha o menu automaticamente no celular
-            if(window.innerWidth <= 900){
+            if (window.innerWidth <= 900) {
 
                 document
-                .querySelector(".sidebar")
-                .classList.remove("aberto");
+                    .querySelector(".sidebar")
+                    .classList.remove("aberto");
 
             }
 
@@ -310,7 +286,7 @@ function configurarMenu(){
 
 const logo = document.getElementById("logoHome");
 
-logo.onclick = function(){
+logo.onclick = function () {
 
     document
         .querySelectorAll(".sidebar li")
@@ -326,7 +302,7 @@ logo.onclick = function(){
   RELÓGIO
 =====================================================*/
 
-function atualizarRelogio(){
+function atualizarRelogio() {
 
     const hoje = new Date();
 
@@ -336,13 +312,13 @@ function atualizarRelogio(){
 
         {
 
-            weekday:"long",
+            weekday: "long",
 
-            day:"2-digit",
+            day: "2-digit",
 
-            month:"2-digit",
+            month: "2-digit",
 
-            year:"numeric"
+            year: "numeric"
 
         }
 
@@ -350,13 +326,13 @@ function atualizarRelogio(){
 
     const hora = hoje.toLocaleTimeString("pt-BR");
 
-    const relogio=document.getElementById("relogio");
+    const relogio = document.getElementById("relogio");
 
-    if(relogio){
+    if (relogio) {
 
-        relogio.innerHTML=
+        relogio.innerHTML =
 
-        data+" • "+hora;
+            data + " • " + hora;
 
     }
 
@@ -364,11 +340,11 @@ function atualizarRelogio(){
 
 
 
-async function renderizar(){
+async function renderizar() {
 
     await prepararNovoDiaImpressoes();
-	
-	await prepararNovoDia();
+
+    await prepararNovoDia();
 
     atualizarTitulo();
 
@@ -381,7 +357,7 @@ async function renderizar(){
 }
 
 
-function mostrarTela(){
+function mostrarTela() {
 
     const cards = document.getElementById("cards");
 
@@ -395,39 +371,39 @@ function mostrarTela(){
 
     const btnNova2 = document.getElementById("btnNova2");
 
-    switch(categoriaAtual){
+    switch (categoriaAtual) {
 
-       case "Início":
+        case "Início":
 
-    cards.style.display = "grid";
+            cards.style.display = "grid";
 
-    bloco.style.display = "none";
+            bloco.style.display = "none";
 
-    contador.style.display = "none";
+            contador.style.display = "none";
 
-    app.classList.remove("modo-bloco");
+            app.classList.remove("modo-bloco");
 
-    btnNova.style.display = "";
-    
-    btnNova2.style.display = "";
+            btnNova.style.display = "";
 
-    desenharInicio(banco);
+            btnNova2.style.display = "";
 
-    break;
+            desenharInicio(banco);
+
+            break;
 
         case "Bloco de Notas":
 
             cards.style.display = "none";
 
             bloco.style.display = "block";
-            
+
             app.classList.add("modo-bloco");
 
             desenharBlocoNotas();
 
             break;
 
-            case "Contador de Impressões":
+        case "Contador de Impressões":
 
             cards.style.display = "none";
 
@@ -438,12 +414,12 @@ function mostrarTela(){
             app.classList.remove("modo-bloco");
 
             btnNova.style.display = "none";
-            
+
             btnNova2.style.display = "none";
 
             desenharContadorImpressoes();
 
-    break;
+            break;
 
         case "Prompts":
 
@@ -507,165 +483,164 @@ function mostrarTela(){
   TTULO
 =====================================================*/
 
-function atualizarTitulo(){
+function atualizarTitulo() {
 
-    const titulo=document.querySelector(".titulo h1");
+    const titulo = document.querySelector(".titulo h1");
 
-    const subtitulo=document.querySelector(".titulo span");
+    const subtitulo = document.querySelector(".titulo span");
 
-    if(!titulo) return;
+    if (!titulo) return;
 
-    const icones={
+    const icones = {
 
-        "Pendências":"fa-list-check",
+        "Pendências": "fa-list-check",
 
-        "Bloco de Notas":"fa-note-sticky",
+        "Bloco de Notas": "fa-note-sticky",
 
-        "Contador de Impressões":"fa-print",
+        "Contador de Impressões": "fa-print",
 
-        "Clientes":"fa-address-book",
+        "Clientes": "fa-address-book",
 
-        "VBA":"fa-code",
+        "VBA": "fa-code",
 
-        "Investimentos":"fa-chart-line",
+        "Investimentos": "fa-chart-line",
 
-        "Marketing":"fa-bullhorn",
-	
-	"Prompts":"fa-wand-magic-sparkles",
+        "Marketing": "fa-bullhorn",
 
-        "Serviços":"fa-briefcase",
+        "Prompts": "fa-wand-magic-sparkles",
 
-        "Compras":"fa-cart-shopping",
+        "Serviços": "fa-briefcase",
 
-        "Favoritos":"fa-star",
+        "Compras": "fa-cart-shopping",
 
-        "Concluídos":"fa-circle-check"
+        "Favoritos": "fa-star",
+
+        "Concluídos": "fa-circle-check"
+
+    };
+
+    const textos = {
+
+        "Pendências": "Suas tarefas e lembretes do dia.",
+
+        "Bloco de Notas": "Anotações rápidas.",
+
+        "Contador de Impressões": "Controle diário das impressões realizadas.",
+
+        "Clientes": "Cadastro de clientes.",
+
+        "VBA": "Ideias de Programação.",
+
+        "Investimentos": "Controle de investimentos.",
+
+        "Marketing": "Ideias e campanhas.",
+
+        "Prompts": "Biblioteca de prompts para geração de imagens.",
+
+        "Serviços": "Cadastro dos serviços oferecidos pela Lan Master.",
+
+        "Compras": "Lista de compras.",
+
+        "Favoritos": "Anotações favoritas.",
+
+        "Concluídos": "Itens concluídos."
 
     };
 
-    const textos={
+    const nomes = {
 
-        "Pendências":"Suas tarefas e lembretes do dia.",
-
-        "Bloco de Notas":"Anotações rápidas.",
-
-        "Contador de Impressões":"Controle diário das impressões realizadas.",
-
-        "Clientes":"Cadastro de clientes.",
-
-        "VBA":"Ideias de Programação.",
-
-        "Investimentos":"Controle de investimentos.",
-
-        "Marketing":"Ideias e campanhas.",
-
-	"Prompts":"Biblioteca de prompts para geração de imagens.",
-
-	"Serviços":"Cadastro dos serviços oferecidos pela Lan Master.",
-
-        "Compras":"Lista de compras.",
-
-        "Favoritos":"Anotações favoritas.",
-
-        "Concluídos":"Itens concluídos."
+        "VBA": "Ideias de Programação."
 
     };
-	
-	const nomes={
 
-    "VBA":"Ideias de Programação."
-
-};
-
-    titulo.innerHTML=`
+    titulo.innerHTML = `
     <i class="fa-solid ${icones[categoriaAtual]}"></i>
     ${nomes[categoriaAtual] || categoriaAtual}
 `;
 
-    if(subtitulo){
+    if (subtitulo) {
 
-        subtitulo.textContent=textos[categoriaAtual];
+        subtitulo.textContent = textos[categoriaAtual];
 
     }
 
-const btnNova = document.getElementById("btnNova");
-const btnNova2 = document.getElementById("btnNova2");
-const pesquisa = document.querySelector(".pesquisa");
-const painel = document.querySelector(".painel");
+    const btnNova = document.getElementById("btnNova");
+    const btnNova2 = document.getElementById("btnNova2");
+    const pesquisa = document.querySelector(".pesquisa");
+    const painel = document.querySelector(".painel");
 
-if (categoriaAtual === "Bloco de Notas") {
+    if (categoriaAtual === "Bloco de Notas") {
 
-    btnNova.style.display = "none";
+        btnNova.style.display = "none";
 
-    if (btnNova2) btnNova2.style.display = "none";
+        if (btnNova2) btnNova2.style.display = "none";
 
-    if (pesquisa) pesquisa.style.display = "none";
+        if (pesquisa) pesquisa.style.display = "none";
 
-    if (subtitulo) subtitulo.style.display = "none";
+        if (subtitulo) subtitulo.style.display = "none";
 
-    if (painel) painel.style.display = "none";
+        if (painel) painel.style.display = "none";
 
-}else if(categoriaAtual === "Início"){
+    } else if (categoriaAtual === "Início") {
 
-    titulo.innerHTML = "";
+        titulo.innerHTML = "";
 
-if(subtitulo){
+        if (subtitulo) {
 
-    subtitulo.innerHTML = "";
+            subtitulo.innerHTML = "";
 
-}
+        }
 
 
-    btnNova.style.display = "none";
+        btnNova.style.display = "none";
 
-    if (btnNova2) btnNova2.style.display = "none";
+        if (btnNova2) btnNova2.style.display = "none";
 
-    if (pesquisa) pesquisa.style.display = "flex";
+        if (pesquisa) pesquisa.style.display = "flex";
 
-    if (subtitulo) subtitulo.style.display = "";
+        if (subtitulo) subtitulo.style.display = "";
 
-    if (painel) painel.style.display = "";
+        if (painel) painel.style.display = "";
 
-}else   
-    {
+    } else {
 
-    btnNova.style.display = "";
+        btnNova.style.display = "";
 
-    if (btnNova2) btnNova2.style.display = "";
+        if (btnNova2) btnNova2.style.display = "";
 
-    if (pesquisa) pesquisa.style.display = "flex";
+        if (pesquisa) pesquisa.style.display = "flex";
 
-    if (subtitulo) subtitulo.style.display = "";
+        if (subtitulo) subtitulo.style.display = "";
 
-    if (painel) painel.style.display = "";
+        if (painel) painel.style.display = "";
 
-}
+    }
 
-let textoBotao = "Nova Anotação";
+    let textoBotao = "Nova Anotação";
 
-if(categoriaAtual === "Prompts"){
+    if (categoriaAtual === "Prompts") {
 
-    textoBotao = "Novo Prompt";
+        textoBotao = "Novo Prompt";
 
-}else if(categoriaAtual === "Serviços"){
+    } else if (categoriaAtual === "Serviços") {
 
-    textoBotao = "Novo Serviço";
+        textoBotao = "Novo Serviço";
 
-}
+    }
 
-if (btnNova) {
-    btnNova.innerHTML = `
+    if (btnNova) {
+        btnNova.innerHTML = `
         <i class="fa-solid fa-plus"></i>
         ${textoBotao}
     `;
-}
+    }
 
-if (btnNova2) {
-    btnNova2.innerHTML = `
+    if (btnNova2) {
+        btnNova2.innerHTML = `
         <i class="fa-solid fa-plus"></i>
         ${textoBotao}
     `;
-}
+    }
 
 }
 
@@ -673,7 +648,7 @@ if (btnNova2) {
   RESUMO
 =====================================================*/
 
-function atualizarResumo(){
+function atualizarResumo() {
 
     atualizarNumero(
 
@@ -709,13 +684,13 @@ function atualizarResumo(){
 
 }
 
-function atualizarNumero(id,valor){
+function atualizarNumero(id, valor) {
 
-    const obj=document.getElementById(id);
+    const obj = document.getElementById(id);
 
-    if(obj){
+    if (obj) {
 
-        obj.innerText=valor;
+        obj.innerText = valor;
 
     }
 
@@ -723,7 +698,7 @@ function atualizarNumero(id,valor){
 
 
 
-function atualizarBadges(){
+function atualizarBadges() {
 
     document.getElementById("badgePendencias").textContent =
         banco["Pendências"].length;
@@ -764,30 +739,30 @@ function atualizarBadges(){
 /*=====================================================
   CARDS
 =====================================================*/
-function desenharCards(){
+function desenharCards() {
 
-    const area=document.getElementById("cards");
+    const area = document.getElementById("cards");
 
-    if(!area) return;
+    if (!area) return;
 
-    area.innerHTML="";
+    area.innerHTML = "";
 
-    let lista=[];
+    let lista = [];
 
-    if(categoriaAtual==="Favoritos"){
+    if (categoriaAtual === "Favoritos") {
 
-        CATEGORIAS.forEach(cat=>{
+        CATEGORIAS.forEach(cat => {
 
-            if(cat==="Favoritos") return;
+            if (cat === "Favoritos") return;
 
-            banco[cat].forEach((item,indice)=>{
+            banco[cat].forEach((item, indice) => {
 
-                if(item.favorito){
+                if (item.favorito) {
 
                     lista.push({
-                        categoria:cat,
-                        indice:indice,
-                        dados:item
+                        categoria: cat,
+                        indice: indice,
+                        dados: item
                     });
 
                 }
@@ -796,31 +771,31 @@ function desenharCards(){
 
         });
 
-    }else{
+    } else {
 
-        banco[categoriaAtual].forEach((item,indice)=>{
+        banco[categoriaAtual].forEach((item, indice) => {
 
             lista.push({
-                categoria:categoriaAtual,
-                indice:indice,
-                dados:item
+                categoria: categoriaAtual,
+                indice: indice,
+                dados: item
             });
 
         });
 
     }
 
-    const pesquisa=document.getElementById("pesquisa");
+    const pesquisa = document.getElementById("pesquisa");
 
-    let filtro="";
+    let filtro = "";
 
-    if(pesquisa){
+    if (pesquisa) {
 
-        filtro=pesquisa.value.toLowerCase();
+        filtro = pesquisa.value.toLowerCase();
 
     }
 
-    lista=lista.filter(cartao=>{
+    lista = lista.filter(cartao => {
 
         return (
 
@@ -833,56 +808,56 @@ function desenharCards(){
     });
 
 
-const ordemPrioridade = {
-    "A": 1,
-    "M": 2,
-    "B": 3
-};
+    const ordemPrioridade = {
+        "A": 1,
+        "M": 2,
+        "B": 3
+    };
 
-lista.sort((a, b) => {
+    lista.sort((a, b) => {
 
-    // 1 - Prioridade
-    const prioridade =
-        ordemPrioridade[a.dados.prioridade] -
-        ordemPrioridade[b.dados.prioridade];
+        // 1 - Prioridade
+        const prioridade =
+            ordemPrioridade[a.dados.prioridade] -
+            ordemPrioridade[b.dados.prioridade];
 
-    if (prioridade !== 0)
-        return prioridade;
+        if (prioridade !== 0)
+            return prioridade;
 
-    // 2 - Data de vencimento
-    const va = a.dados.vencimento;
-    const vb = b.dados.vencimento;
+        // 2 - Data de vencimento
+        const va = a.dados.vencimento;
+        const vb = b.dados.vencimento;
 
-    if (va && vb) {
+        if (va && vb) {
 
-        const dataA = new Date(va);
-        const dataB = new Date(vb);
+            const dataA = new Date(va);
+            const dataB = new Date(vb);
 
-        if (dataA.getTime() !== dataB.getTime()) {
-            return dataA - dataB;
+            if (dataA.getTime() !== dataB.getTime()) {
+                return dataA - dataB;
+            }
+
+        } else if (va && !vb) {
+
+            return -1;
+
+        } else if (!va && vb) {
+
+            return 1;
+
         }
 
-    } else if (va && !vb) {
+        // 3 - Mais recente primeiro
+        return (
+            (b.dados.timestamp || 0) -
+            (a.dados.timestamp || 0)
+        );
 
-        return -1;
+    });
 
-    } else if (!va && vb) {
+    if (lista.length === 0) {
 
-        return 1;
-
-    }
-
-    // 3 - Mais recente primeiro
-  return (
-    (b.dados.timestamp || 0) -
-    (a.dados.timestamp || 0)
-);
-
-});
-
-    if(lista.length===0){
-
-        area.innerHTML=`
+        area.innerHTML = `
         <div class="card">
             <h3>Nenhuma anotação encontrada</h3>
         </div>`;
@@ -891,20 +866,20 @@ lista.sort((a, b) => {
 
     }
 
-    lista.forEach(cartao=>{
+    lista.forEach(cartao => {
 
-        const c=cartao.dados;
+        const c = cartao.dados;
 
-        area.innerHTML+=`
+        area.innerHTML += `
 
         <div class="card">
 
          <h3>${c.titulo}</h3>
 
 ${c.descricao && c.descricao.trim() !== ""
-    ? `<p>${c.descricao}</p>`
-    : ""
-}
+                ? `<p>${c.descricao}</p>`
+                : ""
+            }
 
 <div class="data">
     ${c.data}
@@ -915,8 +890,8 @@ ${c.descricao && c.descricao.trim() !== ""
                 <button onclick="favoritar('${cartao.categoria}',${cartao.indice})">
 
                     <i class="${c.favorito
-                    ?'fa-solid fa-star'
-                    :'fa-regular fa-star'}"></i>
+                ? 'fa-solid fa-star'
+                : 'fa-regular fa-star'}"></i>
 
                 </button>
 
@@ -948,37 +923,37 @@ ${c.descricao && c.descricao.trim() !== ""
   PROMPTS
 =====================================================*/
 
-function desenharPrompts(){
+function desenharPrompts() {
 
     const area = document.getElementById("cards");
 
     area.innerHTML = "";
 
-   const pesquisa = document.getElementById("pesquisa");
+    const pesquisa = document.getElementById("pesquisa");
 
-let filtro = "";
+    let filtro = "";
 
-if (pesquisa) {
-    filtro = pesquisa.value.toLowerCase();
-}
+    if (pesquisa) {
+        filtro = pesquisa.value.toLowerCase();
+    }
 
-const lista = banco["Prompts"]
-    .map((item, indice) => ({
-        item,
-        indiceOriginal: indice
-    }))
-    .filter(obj =>
-        obj.item.titulo.toLowerCase().includes(filtro) ||
-        obj.item.prompt.toLowerCase().includes(filtro)
+    const lista = banco["Prompts"]
+        .map((item, indice) => ({
+            item,
+            indiceOriginal: indice
+        }))
+        .filter(obj =>
+            obj.item.titulo.toLowerCase().includes(filtro) ||
+            obj.item.prompt.toLowerCase().includes(filtro)
+        );
+
+
+    lista.sort((a, b) =>
+        (b.item.timestamp || 0) -
+        (a.item.timestamp || 0)
     );
 
-
-lista.sort((a, b) =>
-    (b.item.timestamp || 0) -
-    (a.item.timestamp || 0)
-);
-
-    if(lista.length == 0){
+    if (lista.length == 0) {
 
         area.innerHTML = `
             <div class="card">
@@ -992,7 +967,7 @@ lista.sort((a, b) =>
 
     lista.forEach(obj => {
 
-    const item = obj.item;
+        const item = obj.item;
 
         area.innerHTML += `
 
@@ -1028,6 +1003,8 @@ lista.sort((a, b) =>
 
     <button onclick="excluirPrompt(${obj.indiceOriginal})">
 
+
+    
         <i class="fa-solid fa-trash"></i>
 
         Excluir
@@ -1043,13 +1020,13 @@ lista.sort((a, b) =>
 }
 
 
-function desenharServicos(){
+function desenharServicos() {
 
     const area = document.getElementById("cards");
 
     area.innerHTML = "";
 
-    if(banco["Serviços"].length == 0){
+    if (banco["Serviços"].length == 0) {
 
         area.innerHTML = `
             <div class="card">
@@ -1067,7 +1044,7 @@ function desenharServicos(){
 
     }
 
-    banco["Serviços"].forEach((servico, indice)=>{
+    banco["Serviços"].forEach((servico, indice) => {
 
         area.innerHTML += `
 
@@ -1112,7 +1089,7 @@ function desenharServicos(){
 }
 
 
-async function desenharPropagandasDoDia(){
+async function desenharPropagandasDoDia() {
 
     const painel = document.getElementById("propagandasDia");
     const lista = document.getElementById("listaPropagandas");
@@ -1129,7 +1106,7 @@ async function desenharPropagandasDoDia(){
 
     );
 
-    if(servicosHoje.length === 0){
+    if (servicosHoje.length === 0) {
 
         lista.innerHTML = `
 
@@ -1152,9 +1129,9 @@ async function desenharPropagandasDoDia(){
 
     };
 
-    servicosHoje.forEach(servico=>{
+    servicosHoje.forEach(servico => {
 
-       lista.innerHTML += `
+        lista.innerHTML += `
 
     <div class="itemPropaganda">
 
@@ -1180,7 +1157,7 @@ async function desenharPropagandasDoDia(){
 
 }
 
-function abrirPromptServico(tituloPrompt){
+function abrirPromptServico(tituloPrompt) {
 
     const indice = banco["Prompts"].findIndex(prompt =>
 
@@ -1188,7 +1165,7 @@ function abrirPromptServico(tituloPrompt){
 
     );
 
-    if(indice === -1){
+    if (indice === -1) {
 
         alert("Prompt não encontrado.");
 
@@ -1201,7 +1178,7 @@ function abrirPromptServico(tituloPrompt){
 }
 
 
-async function concluirPropaganda(idServico){
+async function concluirPropaganda(idServico) {
 
     const servico = banco["Serviços"].find(item =>
 
@@ -1209,7 +1186,7 @@ async function concluirPropaganda(idServico){
 
     );
 
-    if(!servico){
+    if (!servico) {
 
         return;
 
@@ -1223,14 +1200,14 @@ async function concluirPropaganda(idServico){
 
     servico.totalDivulgacoes++;
 
-   const restantes = banco["Serviços"].filter(s => s.metaHoje);
+    const restantes = banco["Serviços"].filter(s => s.metaHoje);
 
-if(restantes.length === 0){
+    if (restantes.length === 0) {
 
-    banco.Configuracoes.metaDiariaConcluida = true;
+        banco.Configuracoes.metaDiariaConcluida = true;
 
-}
-   
+    }
+
     await salvarBanco();
 
     mostrarMensagemPropaganda();
@@ -1240,13 +1217,13 @@ if(restantes.length === 0){
 }
 
 
-function desenharBlocoNotas(){
+function desenharBlocoNotas() {
 
     const area = document.getElementById("blocoNotas");
 
     let texto = "";
 
-    if(banco["Bloco de Notas"].length > 0){
+    if (banco["Bloco de Notas"].length > 0) {
 
         texto = banco["Bloco de Notas"][0].texto || "";
 
@@ -1280,27 +1257,27 @@ function desenharBlocoNotas(){
     document
         .getElementById("btnOkBloco")
         .onclick = salvarBlocoNotas;
-		
-		let timerAutoSave;
 
-document
-    .getElementById("txtBlocoNotas")
-    .addEventListener("input", function(){
+    let timerAutoSave;
 
-        clearTimeout(timerAutoSave);
+    document
+        .getElementById("txtBlocoNotas")
+        .addEventListener("input", function () {
 
-        timerAutoSave = setTimeout(async function(){
+            clearTimeout(timerAutoSave);
 
-            await salvarBlocoNotas();
+            timerAutoSave = setTimeout(async function () {
 
-        }, 1000);
+                await salvarBlocoNotas();
 
-    });
+            }, 1000);
+
+        });
 
 }
 
 
-async function salvarBlocoNotas(){
+async function salvarBlocoNotas() {
 
     const campo = document.getElementById("txtBlocoNotas");
 
@@ -1414,7 +1391,7 @@ let acaoConfirmada = null;
 let indiceEdicaoPrompt = -1;
 let indiceEdicaoServico = -1;
 
-function abrirConfirmacao(texto, acao){
+function abrirConfirmacao(texto, acao) {
 
     textoConfirmacao.innerHTML = texto;
 
@@ -1424,7 +1401,7 @@ function abrirConfirmacao(texto, acao){
 
 }
 
-btnNao.onclick = function(){
+btnNao.onclick = function () {
 
     modalConfirmar.style.display = "none";
 
@@ -1432,11 +1409,11 @@ btnNao.onclick = function(){
 
 }
 
-btnSim.onclick = function(){
+btnSim.onclick = function () {
 
     modalConfirmar.style.display = "none";
 
-    if(acaoConfirmada){
+    if (acaoConfirmada) {
 
         acaoConfirmada();
 
@@ -1444,7 +1421,7 @@ btnSim.onclick = function(){
 
 }
 
-function selecionarPrioridade(nivel){
+function selecionarPrioridade(nivel) {
 
     prioridadeSelecionada = nivel;
 
@@ -1452,9 +1429,9 @@ function selecionarPrioridade(nivel){
     btnMedia.classList.remove("ativa");
     btnBaixa.classList.remove("ativa");
 
-    if(nivel=="A") btnAlta.classList.add("ativa");
-    if(nivel=="M") btnMedia.classList.add("ativa");
-    if(nivel=="B") btnBaixa.classList.add("ativa");
+    if (nivel == "A") btnAlta.classList.add("ativa");
+    if (nivel == "M") btnMedia.classList.add("ativa");
+    if (nivel == "B") btnBaixa.classList.add("ativa");
 
 }
 
@@ -1465,17 +1442,17 @@ btnMedia.onclick = () => selecionarPrioridade("M");
 btnBaixa.onclick = () => selecionarPrioridade("B");
 
 
-function abrirNovoCadastro(){
+function abrirNovoCadastro() {
 
-    if(categoriaAtual === "Prompts"){
+    if (categoriaAtual === "Prompts") {
 
         novoPrompt();
 
-    }else if(categoriaAtual === "Serviços"){
+    } else if (categoriaAtual === "Serviços") {
 
         novoServico();
 
-    }else{
+    } else {
 
         novaAnotacao();
 
@@ -1488,13 +1465,13 @@ function abrirNovoCadastro(){
   NOVA ANOTAÇÃO
 =====================================================*/
 
-function novaAnotacao(){
+function novaAnotacao() {
 
     txtTitulo.value = "";
     txtDescricao.value = "";
 
     chkFavorito.checked = false;
-   selecionarPrioridade("M");
+    selecionarPrioridade("M");
     chkData.checked = false;
 
     txtData.value = "";
@@ -1509,7 +1486,7 @@ function novaAnotacao(){
 
 
 
-chkData.onchange = function(){
+chkData.onchange = function () {
 
     areaData.style.display =
         this.checked ? "block" : "none";
@@ -1517,7 +1494,7 @@ chkData.onchange = function(){
 };
 
 
-btnCancelar.onclick = function(){
+btnCancelar.onclick = function () {
 
     modalNova.style.display = "none";
 
@@ -1525,9 +1502,9 @@ btnCancelar.onclick = function(){
 
 
 
-btnSalvarModal.onclick = async function(){
+btnSalvarModal.onclick = async function () {
 
-    if(txtTitulo.value.trim()==""){
+    if (txtTitulo.value.trim() == "") {
 
         alert("Informe um título.");
 
@@ -1539,63 +1516,63 @@ btnSalvarModal.onclick = async function(){
 
     const agora = new Date();
 
-banco[categoriaAtual].push({
+    banco[categoriaAtual].push({
 
-    titulo:txtTitulo.value.trim(),
+        titulo: txtTitulo.value.trim(),
 
-    descricao:txtDescricao.value.trim(),
+        descricao: txtDescricao.value.trim(),
 
-    data:agora.toLocaleString("pt-BR"),
+        data: agora.toLocaleString("pt-BR"),
 
-    timestamp: Date.now(),
+        timestamp: Date.now(),
 
-    favorito:chkFavorito.checked,
+        favorito: chkFavorito.checked,
 
-    prioridade: prioridadeSelecionada,
+        prioridade: prioridadeSelecionada,
 
-    tag:"",
+        tag: "",
 
-    vencimento:chkData.checked ? txtData.value : "",
+        vencimento: chkData.checked ? txtData.value : "",
 
-    fixado:false
+        fixado: false
 
-});
+    });
 
 
 
     await salvarBanco();
 
-    modalNova.style.display="none";
+    modalNova.style.display = "none";
 
     renderizar();
 
 };
 
-const botaoNova=document.querySelector(".novo");
+const botaoNova = document.querySelector(".novo");
 
-if(botaoNova){
-    botaoNova.onclick=abrirNovoCadastro;
+if (botaoNova) {
+    botaoNova.onclick = abrirNovoCadastro;
 }
 
 /*=====================================================
   EDITAR
 =====================================================*/
 
-async function editarCartao(categoria,indice){
+async function editarCartao(categoria, indice) {
 
-    let cartao=banco[categoria][indice];
+    let cartao = banco[categoria][indice];
 
-    let titulo=prompt("Título:",cartao.titulo);
+    let titulo = prompt("Título:", cartao.titulo);
 
-    if(titulo===null) return;
+    if (titulo === null) return;
 
-    let descricao=prompt("Descrição:",cartao.descricao);
+    let descricao = prompt("Descrição:", cartao.descricao);
 
-    if(descricao===null) return;
+    if (descricao === null) return;
 
-    cartao.titulo=titulo;
+    cartao.titulo = titulo;
 
-    cartao.descricao=descricao;
+    cartao.descricao = descricao;
 
     await salvarBanco();
 
@@ -1606,10 +1583,10 @@ async function editarCartao(categoria,indice){
   FAVORITAR
 =====================================================*/
 
-async function favoritar(categoria,indice){
+async function favoritar(categoria, indice) {
 
-    banco[categoria][indice].favorito=
-    !banco[categoria][indice].favorito;
+    banco[categoria][indice].favorito =
+        !banco[categoria][indice].favorito;
 
     await salvarBanco();
 
@@ -1620,11 +1597,11 @@ async function favoritar(categoria,indice){
   CONCLUIR
 =====================================================*/
 
-async function concluir(categoria, indice){
+async function concluir(categoria, indice) {
 
     let cartao = banco[categoria][indice];
 
-    banco[categoria].splice(indice,1);
+    banco[categoria].splice(indice, 1);
 
     banco["Concluídos"].push(cartao);
 
@@ -1639,11 +1616,11 @@ async function concluir(categoria, indice){
   RESTAURAR
 =====================================================*/
 
- async function restaurar(indice){
+async function restaurar(indice) {
 
     const cartao = banco["Concluídos"][indice];
 
-    banco["Concluídos"].splice(indice,1);
+    banco["Concluídos"].splice(indice, 1);
 
     banco["Pendências"].push(cartao);
 
@@ -1658,12 +1635,12 @@ async function concluir(categoria, indice){
 /*=====================================================
   EXCLUIR
 =====================================================*/
-async function excluir(indice){
+async function excluir(indice) {
 
-    if(!confirm("Deseja realmente excluir esta anotação?"))
+    if (!confirm("Deseja realmente excluir esta anotação?"))
         return;
 
-    banco[categoriaAtual].splice(indice,1);
+    banco[categoriaAtual].splice(indice, 1);
 
     await salvarBanco();
 
@@ -1672,11 +1649,11 @@ async function excluir(indice){
 }
 
 
-const pesquisa=document.getElementById("pesquisa");
+const pesquisa = document.getElementById("pesquisa");
 
-if(pesquisa){
+if (pesquisa) {
 
-    pesquisa.addEventListener("keyup",renderizar);
+    pesquisa.addEventListener("keyup", renderizar);
 
 }
 
@@ -1689,7 +1666,7 @@ document.getElementById("btnNova").onclick = abrirNovoCadastro;
 
 document.getElementById("btnNova2").onclick = abrirNovoCadastro;
 
-document.getElementById("btnFavoritos").onclick = function(){
+document.getElementById("btnFavoritos").onclick = function () {
 
     categoriaAtual = "Favoritos";
 
@@ -1697,8 +1674,8 @@ document.getElementById("btnFavoritos").onclick = function(){
         .forEach(li => li.classList.remove("ativo"));
 
     document
-    .querySelector('.sidebar li[data-categoria="Favoritos"]')
-    .classList.add("ativo");
+        .querySelector('.sidebar li[data-categoria="Favoritos"]')
+        .classList.add("ativo");
 
     renderizar();
 
@@ -1712,33 +1689,33 @@ MENU MOBILE
 
 const btnMenu = document.getElementById("btnMenu");
 
-if(btnMenu){
+if (btnMenu) {
 
-    btnMenu.onclick=function(e){
+    btnMenu.onclick = function (e) {
 
         e.stopPropagation();
 
         document
-        .querySelector(".sidebar")
-        .classList.toggle("aberto");
+            .querySelector(".sidebar")
+            .classList.toggle("aberto");
 
     }
 
 }
 
 // Fecha ao tocar fora do menu
-document.addEventListener("click",function(e){
+document.addEventListener("click", function (e) {
 
-    if(window.innerWidth > 900) return;
+    if (window.innerWidth > 900) return;
 
-    const menu=document.querySelector(".sidebar");
+    const menu = document.querySelector(".sidebar");
 
-    if(
+    if (
         menu.classList.contains("aberto") &&
         !menu.contains(e.target) &&
-        e.target.id!="btnMenu" &&
+        e.target.id != "btnMenu" &&
         !e.target.closest("#btnMenu")
-    ){
+    ) {
 
         menu.classList.remove("aberto");
 
@@ -1747,7 +1724,7 @@ document.addEventListener("click",function(e){
 });
 
 
-function mostrarMensagemConclusao(){
+function mostrarMensagemConclusao() {
 
     const msg = document.createElement("div");
 
@@ -1760,23 +1737,23 @@ function mostrarMensagemConclusao(){
 
     document.body.appendChild(msg);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.add("mostrar");
-    },10);
+    }, 10);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.remove("mostrar");
 
-        setTimeout(()=>{
+        setTimeout(() => {
             msg.remove();
-        },400);
+        }, 400);
 
-    },2500);
+    }, 2500);
 
 }
 
 
-function mostrarMensagemPropaganda(){
+function mostrarMensagemPropaganda() {
 
     const msg = document.createElement("div");
 
@@ -1789,23 +1766,23 @@ function mostrarMensagemPropaganda(){
 
     document.body.appendChild(msg);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.add("mostrar");
-    },10);
+    }, 10);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.remove("mostrar");
 
-        setTimeout(()=>{
+        setTimeout(() => {
             msg.remove();
-        },400);
+        }, 400);
 
-    },2000);
+    }, 2000);
 
 }
 
 
-function mostrarMensagemPropagandaReset(){
+function mostrarMensagemPropagandaReset() {
 
     const msg = document.createElement("div");
 
@@ -1818,28 +1795,28 @@ function mostrarMensagemPropagandaReset(){
 
     document.body.appendChild(msg);
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
         msg.classList.add("mostrar");
 
-    },10);
+    }, 10);
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
         msg.classList.remove("mostrar");
 
-        setTimeout(()=>{
+        setTimeout(() => {
 
             msg.remove();
 
-        },400);
+        }, 400);
 
-    },2000);
+    }, 2000);
 
 }
 
 
-function mostrarMensagemSalva(){
+function mostrarMensagemSalva() {
 
     const msg = document.createElement("div");
 
@@ -1852,18 +1829,18 @@ function mostrarMensagemSalva(){
 
     document.body.appendChild(msg);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.add("mostrar");
-    },10);
+    }, 10);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         msg.classList.remove("mostrar");
 
-        setTimeout(()=>{
+        setTimeout(() => {
             msg.remove();
-        },400);
+        }, 400);
 
-    },1800);
+    }, 1800);
 
 }
 
@@ -1871,15 +1848,15 @@ function mostrarMensagemSalva(){
 EXCLUIR PROMPT
 =====================================================*/
 
-async function excluirPrompt(indice){
+async function excluirPrompt(indice) {
 
     abrirConfirmacao(
 
         "Deseja realmente excluir este Prompt?",
 
-        async function(){
+        async function () {
 
-            banco["Prompts"].splice(indice,1);
+            banco["Prompts"].splice(indice, 1);
 
             await salvarBanco();
 
@@ -1892,15 +1869,15 @@ async function excluirPrompt(indice){
 }
 
 
-async function excluirServico(indice){
+async function excluirServico(indice) {
 
     abrirConfirmacao(
 
         "Deseja realmente excluir este serviço?",
 
-        async function(){
+        async function () {
 
-            banco["Serviços"].splice(indice,1);
+            banco["Serviços"].splice(indice, 1);
 
             await salvarBanco();
 
@@ -1913,15 +1890,15 @@ async function excluirServico(indice){
 }
 
 
-function obterServicosDoDia(){
+function obterServicosDoDia() {
 
-    if(banco["Serviços"].length === 0){
+    if (banco["Serviços"].length === 0) {
 
         return [];
 
     }
 
-    let ativos = banco["Serviços"].filter(servico=>
+    let ativos = banco["Serviços"].filter(servico =>
 
         servico.status === "Ativo" &&
 
@@ -1929,15 +1906,15 @@ function obterServicosDoDia(){
 
     );
 
-    if(ativos.length === 0){
+    if (ativos.length === 0) {
 
-        banco["Serviços"].forEach(servico=>{
+        banco["Serviços"].forEach(servico => {
 
             servico.divulgadoNoCiclo = false;
 
         });
 
-        ativos = banco["Serviços"].filter(servico=>
+        ativos = banco["Serviços"].filter(servico =>
 
             servico.status === "Ativo"
 
@@ -1945,52 +1922,52 @@ function obterServicosDoDia(){
 
     }
 
-    ativos.sort(()=>Math.random()-0.5);
+    ativos.sort(() => Math.random() - 0.5);
 
-    return ativos.slice(0,2);
+    return ativos.slice(0, 2);
 
 }
 
-async function prepararNovoDia(){
+async function prepararNovoDia() {
 
     const hoje = new Date().toLocaleDateString("pt-BR");
 
-    if(banco.Configuracoes.metaDiariaConcluida === undefined){
+    if (banco.Configuracoes.metaDiariaConcluida === undefined) {
 
-    banco.Configuracoes.metaDiariaConcluida = false;
+        banco.Configuracoes.metaDiariaConcluida = false;
 
-}
+    }
 
     // Já preparou as propagandas de hoje?
-    
-   
-    
-if(banco.Configuracoes.dataPropaganda === hoje){
 
-    if(banco.Configuracoes.metaDiariaConcluida){
 
-        return;
+
+    if (banco.Configuracoes.dataPropaganda === hoje) {
+
+        if (banco.Configuracoes.metaDiariaConcluida) {
+
+            return;
+
+        }
+
+        const existeMetaHoje = banco["Serviços"].some(servico => servico.metaHoje);
+
+        if (existeMetaHoje) {
+
+            return;
+
+        }
 
     }
-
-    const existeMetaHoje = banco["Serviços"].some(servico => servico.metaHoje);
-
-    if(existeMetaHoje){
-
-        return;
-
-    }
-
-}
     // Limpa as propagandas do dia anterior
-    banco["Serviços"].forEach(servico=>{
+    banco["Serviços"].forEach(servico => {
 
         servico.metaHoje = false;
 
     });
 
     // Serviços disponíveis
-    let disponiveis = banco["Serviços"].filter(servico=>
+    let disponiveis = banco["Serviços"].filter(servico =>
 
         servico.status === "Ativo" &&
         servico.divulgadoNoCiclo === false
@@ -1998,15 +1975,15 @@ if(banco.Configuracoes.dataPropaganda === hoje){
     );
 
     // Terminou o ciclo?
-    if(disponiveis.length === 0){
+    if (disponiveis.length === 0) {
 
-        banco["Serviços"].forEach(servico=>{
+        banco["Serviços"].forEach(servico => {
 
             servico.divulgadoNoCiclo = false;
 
         });
 
-        disponiveis = banco["Serviços"].filter(servico=>
+        disponiveis = banco["Serviços"].filter(servico =>
 
             servico.status === "Ativo"
 
@@ -2018,7 +1995,7 @@ if(banco.Configuracoes.dataPropaganda === hoje){
     disponiveis.sort(() => Math.random() - 0.5);
 
     // Marca até 2 propagandas
-    disponiveis.slice(0,2).forEach(servico=>{
+    disponiveis.slice(0, 2).forEach(servico => {
 
         servico.metaHoje = true;
 
@@ -2031,19 +2008,19 @@ if(banco.Configuracoes.dataPropaganda === hoje){
 
 }
 
-function abrirHomeCategoria(categoria){
+function abrirHomeCategoria(categoria) {
 
     categoriaAtual = categoria;
 
     document
         .querySelectorAll(".sidebar li")
-        .forEach(li=>li.classList.remove("ativo"));
+        .forEach(li => li.classList.remove("ativo"));
 
     const menu = document.querySelector(
         `.sidebar li[data-categoria="${categoria}"]`
     );
 
-    if(menu){
+    if (menu) {
 
         menu.classList.add("ativo");
 
@@ -2061,9 +2038,8 @@ window.concluir = concluir;
 window.editarCartao = editarCartao;
 window.restaurar = restaurar;
 window.excluir = excluir;
-window.alterarContador = alterarContador;
 window.salvarPrecos = salvarPrecos;
-window.alterarManual = alterarManual;
+
 
 window.excluirPrompt = excluirPrompt;
 window.editarPrompt = editarPrompt;
@@ -2074,13 +2050,13 @@ window.abrirPromptServico = abrirPromptServico;
 window.concluirPropaganda = concluirPropaganda;
 
 
-document.addEventListener("keydown", async function(e){
+document.addEventListener("keydown", async function (e) {
 
-    if(e.key === "F9"){
+    if (e.key === "F9") {
 
         e.preventDefault();
 
-        if(!confirm("Resetar as propagandas do dia?")){
+        if (!confirm("Resetar as propagandas do dia?")) {
 
             return;
 
@@ -2090,7 +2066,7 @@ document.addEventListener("keydown", async function(e){
 
         banco.Configuracoes.metaDiariaConcluida = false;
 
-        banco["Serviços"].forEach(servico=>{
+        banco["Serviços"].forEach(servico => {
 
             servico.metaHoje = false;
 
@@ -2109,9 +2085,9 @@ document.addEventListener("keydown", async function(e){
 });
 
 
-document.addEventListener("keydown", async function(e){
+document.addEventListener("keydown", async function (e) {
 
-    if(e.key === "F10"){
+    if (e.key === "F10") {
 
         e.preventDefault();
 
@@ -2129,7 +2105,7 @@ document.addEventListener("keydown", async function(e){
 
 });
 
-function novoPrompt(){
+function novoPrompt() {
 
     indiceEdicaoPrompt = -1;
 
@@ -2147,7 +2123,7 @@ function novoPrompt(){
 
 
 
-function novoServico(){
+function novoServico() {
 
     indiceEdicaoServico = -1;
     document.querySelector("#modalServico h2").innerHTML = `
@@ -2164,7 +2140,7 @@ function novoServico(){
         'input[name="statusServico"][value="Ativo"]'
     ).checked = true;
 
-carregarPromptsServico();
+    carregarPromptsServico();
 
     document.getElementById("modalServico").style.display = "flex";
 
@@ -2175,7 +2151,7 @@ carregarPromptsServico();
 
 
 
-function editarServico(indice){
+function editarServico(indice) {
 
     indiceEdicaoServico = indice;
 
@@ -2188,9 +2164,9 @@ function editarServico(indice){
     carregarPromptsServico();
 
     // Seleciona o Prompt correspondente
-    for(let i = 0; i < cmbPromptServico.options.length; i++){
+    for (let i = 0; i < cmbPromptServico.options.length; i++) {
 
-        if(cmbPromptServico.options[i].text === servico.prompt){
+        if (cmbPromptServico.options[i].text === servico.prompt) {
 
             cmbPromptServico.selectedIndex = i;
             break;
@@ -2216,14 +2192,14 @@ function editarServico(indice){
 
 
 
-function carregarPromptsServico(){
+function carregarPromptsServico() {
 
     const combo = document.getElementById("cmbPromptServico");
 
     combo.innerHTML =
         '<option value="">Selecione um Prompt...</option>';
 
-    banco["Prompts"].forEach((prompt, indice)=>{
+    banco["Prompts"].forEach((prompt, indice) => {
 
         const opcao = document.createElement("option");
 
@@ -2239,7 +2215,7 @@ function carregarPromptsServico(){
 
 
 
-function editarPrompt(indice){
+function editarPrompt(indice) {
 
     indiceEdicaoPrompt = indice;
 
@@ -2256,7 +2232,7 @@ function editarPrompt(indice){
 }
 
 
-function gerarPrompt(indice){
+function gerarPrompt(indice) {
 
     const prompt = banco["Prompts"][indice];
 
@@ -2269,9 +2245,9 @@ function gerarPrompt(indice){
 }
 
 
-btnCopiarPrompt.onclick = async function(){
+btnCopiarPrompt.onclick = async function () {
 
-    try{
+    try {
 
         await navigator.clipboard.writeText(
             txtPromptGerado.value
@@ -2279,7 +2255,7 @@ btnCopiarPrompt.onclick = async function(){
 
         alert("✅ Prompt copiado com sucesso!");
 
-    }catch{
+    } catch {
 
         alert("Não foi possível copiar o Prompt.");
 
@@ -2289,9 +2265,9 @@ btnCopiarPrompt.onclick = async function(){
 
 
 
-btnChatGPT.onclick = async function(){
+btnChatGPT.onclick = async function () {
 
-    try{
+    try {
 
         await navigator.clipboard.writeText(
             txtPromptGerado.value
@@ -2302,7 +2278,7 @@ btnChatGPT.onclick = async function(){
             "_blank"
         );
 
-    }catch{
+    } catch {
 
         alert("Não foi possível abrir o ChatGPT.");
 
@@ -2311,9 +2287,9 @@ btnChatGPT.onclick = async function(){
 }
 
 
-btnGemini.onclick = async function(){
+btnGemini.onclick = async function () {
 
-    try{
+    try {
 
         await navigator.clipboard.writeText(
             txtPromptGerado.value
@@ -2324,7 +2300,7 @@ btnGemini.onclick = async function(){
             "_blank"
         );
 
-    }catch{
+    } catch {
 
         alert("Não foi possível abrir o Gemini.");
 
@@ -2332,22 +2308,22 @@ btnGemini.onclick = async function(){
 
 }
 
-btnFecharGerado.onclick = function(){
+btnFecharGerado.onclick = function () {
 
     modalGerarPrompt.style.display = "none";
 
 }
 
 
-btnCancelarPrompt.onclick = function(){
+btnCancelarPrompt.onclick = function () {
 
     modalPrompt.style.display = "none";
 
 }
 
-btnSalvarPrompt.onclick = async function(){
+btnSalvarPrompt.onclick = async function () {
 
-    if(txtTituloPrompt.value.trim() == ""){
+    if (txtTituloPrompt.value.trim() == "") {
 
         alert("Informe um título.");
         txtTituloPrompt.focus();
@@ -2355,7 +2331,7 @@ btnSalvarPrompt.onclick = async function(){
 
     }
 
-    if(indiceEdicaoPrompt == -1){
+    if (indiceEdicaoPrompt == -1) {
 
         const agora = new Date();
 
@@ -2368,7 +2344,7 @@ btnSalvarPrompt.onclick = async function(){
 
         });
 
-    }else{
+    } else {
 
         banco["Prompts"][indiceEdicaoPrompt].titulo =
             txtTituloPrompt.value.trim();
@@ -2387,15 +2363,15 @@ btnSalvarPrompt.onclick = async function(){
 }
 
 
-btnCancelarServico.onclick = function(){
+btnCancelarServico.onclick = function () {
 
     modalServico.style.display = "none";
 
 }
 
-btnSalvarServico.onclick = async function(){
+btnSalvarServico.onclick = async function () {
 
-    if(txtNomeServico.value.trim() == ""){
+    if (txtNomeServico.value.trim() == "") {
 
         alert("Informe o nome do serviço.");
         txtNomeServico.focus();
@@ -2418,15 +2394,15 @@ btnSalvarServico.onclick = async function(){
         status: document.querySelector(
             'input[name="statusServico"]:checked'
         ).value,
-		
-		
-		ultimaPropaganda: "",
 
-		divulgadoNoCiclo: false,
-		
-		metaHoje: false,
 
-		totalDivulgacoes: 0,
+        ultimaPropaganda: "",
+
+        divulgadoNoCiclo: false,
+
+        metaHoje: false,
+
+        totalDivulgacoes: 0,
 
         data: new Date().toLocaleString("pt-BR"),
 
@@ -2434,11 +2410,11 @@ btnSalvarServico.onclick = async function(){
 
     };
 
-    if(indiceEdicaoServico == -1){
+    if (indiceEdicaoServico == -1) {
 
         banco["Serviços"].push(dadosServico);
 
-    }else{
+    } else {
 
         banco["Serviços"][indiceEdicaoServico] = dadosServico;
 
@@ -2452,14 +2428,14 @@ btnSalvarServico.onclick = async function(){
 
     renderizar();
 
-}
+};
 
-async function prepararNovoDiaImpressoes(){
+async function prepararNovoDiaImpressoes() {
 
     const hoje = new Date().toLocaleDateString("pt-BR");
 
     // Ainda é o mesmo dia
-    if(banco.ContadorImpressoes.data === hoje){
+    if (banco.ContadorImpressoes.data === hoje) {
         return;
     }
 
@@ -2488,244 +2464,132 @@ async function prepararNovoDiaImpressoes(){
 
 }
 
+function desenharContadorImpressoes() {
 
-function desenharContadorImpressoes(){
+   const c = banco.ContadorImpressoes;
 
     document.getElementById("contadorImpressoes").innerHTML = `
 
-    <div class="contadorPainel">
-
-       
-        <div class="cardContador">
-
-            <h3>💲 Preços</h3>
-
-            <div class="linhaCampo">
-
-                <label>Preto e Branco</label>
-
-                <input
-                    type="number"
-                    id="precoPB"
-                    step="0.01"
-                    value="${banco.ContadorImpressoes.precoPB}"
-                    onchange="salvarPrecos()">
-
-            </div>
-
-            <div class="linhaCampo">
-
-                <label>Colorida</label>
-
-                <input
-                    type="number"
-                    id="precoColorida"
-                    step="0.01"
-                    value="${banco.ContadorImpressoes.precoColorida}"
-                    onchange="salvarPrecos()">
-
-            </div>
-
-        </div>
-
-
-        <div class="cardContador">
-
-            <h3>🖨 Impressões</h3>
-
-            <div class="contadorLinhaNova">
-
-                <span>Preto e Branco</span>
-
-                <button onclick="alterarContador('pb',-1)">−</button>
-
-                <input
-                    id="qtdPB"
-                    type="number"
-                    value="${banco.ContadorImpressoes.pb}"
-                    onchange="alterarManual('pb')">
-
-                <button onclick="alterarContador('pb',1)">+</button>
-
-            </div>
-
-            <div class="contadorLinhaNova">
-
-                <span>Coloridas</span>
-
-                <button onclick="alterarContador('colorida',-1)">−</button>
-
-                <input
-                    id="qtdColorida"
-                    type="number"
-                    value="${banco.ContadorImpressoes.colorida}"
-                    onchange="alterarManual('colorida')">
-
-                <button onclick="alterarContador('colorida',1)">+</button>
-
-            </div>
-
-        </div>
-
-
-        <div class="cardContador">
-
-            <h3>📅 Hoje</h3>
-
-            <div class="linhaResumo">
-
-                <span>Impressões</span>
-
-                <strong id="totalImpressoes">
-                    ${banco.ContadorImpressoes.total}
-                </strong>
-
-            </div>
-
-            <div class="linhaResumo">
-
-                <span>Arrecadado</span>
-
-                <strong id="valorTotal">
-
-                    ${banco.ContadorImpressoes.valor.toLocaleString("pt-BR",{
-                        style:"currency",
-                        currency:"BRL"
-                    })}
-
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="cardContador">
-
-            <h3>📊 Estatísticas Gerais</h3>
-
-            <div class="linhaResumo">
-
-                <span>Total PB</span>
-
-                <strong>
-                    ${banco.ContadorImpressoes.totalPB}
-                </strong>
-
-            </div>
-
-            <div class="linhaResumo">
-
-                <span>Total Coloridas</span>
-
-                <strong>
-                    ${banco.ContadorImpressoes.totalColorida}
-                </strong>
-
-            </div>
-
-            <div class="linhaResumo">
-
-                <span>Total Impressões</span>
-
-                <strong>
-                    ${banco.ContadorImpressoes.totalImpressoes}
-                </strong>
-
-            </div>
-
-            <div class="linhaResumo">
-
-                <span>Valor Arrecadado</span>
-
-                <strong>
-
-                    ${banco.ContadorImpressoes.valorTotal.toLocaleString("pt-BR",{
-                        style:"currency",
-                        currency:"BRL"
-                    })}
-
-                </strong>
-
-            </div>
-
-            <hr>
-
-            <button
-                class="btnFechamentoMes"
-                onclick="resetarContador()">
-
-                📅 Fechamento do Mês
-
-            </button>
-
-
-        </div>
-
+<div class="cardContador">
+
+    <h3>💲 Preços</h3>
+
+    <div class="linhaCampo">
+        <label>PB</label>
+        <input id="precoPB"
+               type="number"
+               step="0.01"
+               value="${c.precoPB}"
+               onchange="salvarPrecos()">
     </div>
 
-    `;
-}
+    <div class="linhaCampo">
+        <label>Colorida</label>
+        <input id="precoColorida"
+               type="number"
+               step="0.01"
+               value="${c.precoColorida}"
+               onchange="salvarPrecos()">
+    </div>
 
-function atualizarResumoImpressoes(){
+</div>
 
-    document.getElementById("qtdPB").value =
-        banco.ContadorImpressoes.pb;
 
-    document.getElementById("qtdColorida").value =
-        banco.ContadorImpressoes.colorida;
+<div class="cardContador">
 
-    const total =
-        banco.ContadorImpressoes.pb +
-        banco.ContadorImpressoes.colorida;
+    <h3 style="display:flex;justify-content:space-between;align-items:center;">
 
-    const valor =
-        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
-        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+    <span>🖨 Última Leitura</span>
 
-    document.getElementById("totalImpressoes").innerHTML = total;
+    <span style="font-size:12px;color:#999;">
+        ${c.dataUltimaLeitura || ""}
+    </span>
 
-   document.getElementById("valorTotal").innerHTML =
-    valor.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
-}
+</h3>
 
-async function alterarManual(tipo){
 
-    // Atualiza os preços
-    banco.ContadorImpressoes.precoPB =
-        Number(document.getElementById("precoPB").value) || 0;
+    <div class="linhaCampo">
+        <label>PB</label>
+        <input type="number"
+               value="${c.ultimaLeituraPB}"
+               readonly>
+    </div>
 
-    banco.ContadorImpressoes.precoColorida =
-        Number(document.getElementById("precoColorida").value) || 0;
+    <div class="linhaCampo">
+        <label>Colorida</label>
+        <input type="number"
+               value="${c.ultimaLeituraColorida}"
+               readonly>
+    </div>
 
-    // Atualiza a quantidade digitada
-    if(tipo === "pb"){
+</div>
 
-        banco.ContadorImpressoes.pb =
-            Number(document.getElementById("qtdPB").value) || 0;
 
-    }else{
+<div class="cardContador">
 
-        banco.ContadorImpressoes.colorida =
-            Number(document.getElementById("qtdColorida").value) || 0;
+    <h3>📥 Nova Leitura</h3>
 
-    }
+    <div class="linhaCampo">
+        <label>PB Atual</label>
+        <input id="leituraPB" type="number">
+    </div>
 
-    // Recalcula os totais
-    banco.ContadorImpressoes.total =
-        banco.ContadorImpressoes.pb +
-        banco.ContadorImpressoes.colorida;
+    <div class="linhaCampo">
+        <label>Colorida Atual</label>
+        <input id="leituraColorida" type="number">
+    </div>
 
-    banco.ContadorImpressoes.valor =
-        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
-        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+    <button class="btnCalcularLeitura"
+            onclick="calcularLeitura()">
 
-    await salvarBanco();
+        Calcular
 
-    desenharContadorImpressoes();
+    </button>
+
+</div>
+
+
+<div class="cardContador">
+
+    <h3>📊 Resumo do Mês</h3>
+
+    <div class="linhaResumo">
+        <span>PB</span>
+        <strong>${c.totalPBMes}</strong>
+    </div>
+
+    <div class="linhaResumo">
+        <span>Coloridas</span>
+        <strong>${c.totalColoridaMes}</strong>
+    </div>
+
+    <div class="linhaResumo">
+        <span>Valor PB</span>
+        <strong>${c.valorPBMes.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</strong>
+    </div>
+
+    <div class="linhaResumo">
+        <span>Valor Coloridas</span>
+        <strong>${c.valorColoridaMes.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</strong>
+    </div>
+
+    <hr>
+
+    <div class="linhaResumo">
+        <span><b>Total</b></span>
+        <strong>${(c.valorPBMes + c.valorColoridaMes).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</strong>
+    </div>
+
+    <button class="btnFechamentoMes"
+            onclick="resetarContador()">
+
+        📅 Fechamento do Mês
+
+    </button>
+
+</div>
+
+`;
 
 }
 
@@ -2741,44 +2605,58 @@ async function salvarPrecos() {
     await salvarBanco();
 
 }
-async function alterarContador(tipo, valor){
 
-    // Atualiza os preços digitados na tela
-    banco.ContadorImpressoes.precoPB =
-        Number(document.getElementById("precoPB").value) || 0;
+async function calcularLeitura() {
 
-    banco.ContadorImpressoes.precoColorida =
-        Number(document.getElementById("precoColorida").value) || 0;
+   const contador = banco.ContadorImpressoes;
 
-    // Atualiza os contadores
-    if(tipo === "pb"){
+    const leituraPB = Number(document.getElementById("leituraPB").value);
+    const leituraColorida = Number(document.getElementById("leituraColorida").value);
 
-        banco.ContadorImpressoes.pb += valor;
-
-        if(banco.ContadorImpressoes.pb < 0){
-            banco.ContadorImpressoes.pb = 0;
-        }
-
+    if (isNaN(leituraPB) || isNaN(leituraColorida)) {
+        alert("Informe as duas leituras.");
+        return;
     }
 
-    if(tipo === "colorida"){
+    // Primeira utilização
+    if (contador.ultimaLeituraPB === 0 &&
+        contador.ultimaLeituraColorida === 0) {
 
-        banco.ContadorImpressoes.colorida += valor;
+        contador.ultimaLeituraPB = leituraPB;
+        contador.ultimaLeituraColorida = leituraColorida;
+        
 
-        if(banco.ContadorImpressoes.colorida < 0){
-            banco.ContadorImpressoes.colorida = 0;
-        }
 
+
+
+        contador.dataUltimaLeitura =
+    new Date().toLocaleString("pt-BR");
+
+        await salvarBanco();
+        desenharContadorImpressoes();
+
+        alert("Primeira leitura registrada.");
+        return;
     }
 
-    // Recalcula os totais
-    banco.ContadorImpressoes.total =
-        banco.ContadorImpressoes.pb +
-        banco.ContadorImpressoes.colorida;
+    const diferencaPB = leituraPB - contador.ultimaLeituraPB;
+    const diferencaColorida = leituraColorida - contador.ultimaLeituraColorida;
 
-    banco.ContadorImpressoes.valor =
-        (banco.ContadorImpressoes.pb * banco.ContadorImpressoes.precoPB) +
-        (banco.ContadorImpressoes.colorida * banco.ContadorImpressoes.precoColorida);
+    if (diferencaPB < 0 || diferencaColorida < 0) {
+        alert("A leitura atual não pode ser menor que a anterior.");
+        return;
+    }
+
+    contador.totalPBMes += diferencaPB;
+    contador.totalColoridaMes += diferencaColorida;
+
+    contador.valorPBMes += diferencaPB * contador.precoPB;
+    contador.valorColoridaMes += diferencaColorida * contador.precoColorida;
+
+    contador.ultimaLeituraPB = leituraPB;
+    contador.ultimaLeituraColorida = leituraColorida;
+
+    contador.dataUltimaLeitura = new Date().toLocaleString("pt-BR");
 
     await salvarBanco();
 
@@ -2786,38 +2664,39 @@ async function alterarContador(tipo, valor){
 
 }
 
-async function resetarContador(){
+window.calcularLeitura = calcularLeitura;
 
-    const confirmar = confirm(
+async function resetarContador() {
 
-`Deseja realmente realizar o fechamento do mês?
-
-Todos os contadores serão zerados.
-
-Esta ação não poderá ser desfeita.`
-
-    );
-
-    if(!confirmar){
+    if (!confirm("Deseja realmente apagar todos os dados do contador?")) {
         return;
     }
 
-    // Zera contadores do dia
-    banco.ContadorImpressoes.pb = 0;
-    banco.ContadorImpressoes.colorida = 0;
+    const precoPB = banco.ContadorImpressoes.precoPB;
+    const precoColorida = banco.ContadorImpressoes.precoColorida;
 
-    banco.ContadorImpressoes.total = 0;
-    banco.ContadorImpressoes.valor = 0;
+    banco.ContadorImpressoes = {
 
-    // Zera estatísticas gerais
-    banco.ContadorImpressoes.totalPB = 0;
-    banco.ContadorImpressoes.totalColorida = 0;
-    banco.ContadorImpressoes.totalImpressoes = 0;
-    banco.ContadorImpressoes.valorTotal = 0;
+        precoPB,
+        precoColorida,
 
-    // Atualiza a data
-    banco.ContadorImpressoes.data =
-        new Date().toLocaleDateString("pt-BR");
+        ultimaLeituraPB: 0,
+        ultimaLeituraColorida: 0,
+
+        totalPBMes: 0,
+        totalColoridaMes: 0,
+
+        valorPBMes: 0,
+        valorColoridaMes: 0,
+
+        totalPB: 0,
+        totalColorida: 0,
+        totalImpressoes: 0,
+        valorTotal: 0,
+
+        data: new Date().toLocaleDateString("pt-BR")
+
+    };
 
     await salvarBanco();
 
@@ -2826,3 +2705,6 @@ Esta ação não poderá ser desfeita.`
 }
 
 window.resetarContador = resetarContador;
+
+
+

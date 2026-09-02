@@ -2034,3 +2034,95 @@ HOME
     font-size:24px;
 
 }
+
+/*=====================================================
+  BOTÃO FECHAMENTO DO MÊS
+=====================================================*/
+
+.btnFechamentoMes{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:12px 16px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#dc3545;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.25s;
+
+}
+
+.btnFechamentoMes:hover{
+
+    background:#bb2d3b;
+
+    transform:translateY(-2px);
+
+}
+
+.btnCalcularLeitura{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2d7ef7;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+.btnCalcularLeitura:hover{
+
+    background:#1764d8;
+
+}
+
+.btnResetGeral{
+
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+
+    background:#d32f2f;
+    color:white;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+}
+
+.btnResetGeral:hover{
+
+    background:#b71c1c;
+
+}
